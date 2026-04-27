@@ -10,7 +10,7 @@ Test module for scitex.pd.to_numeric function.
 import numpy as np
 import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal, assert_series_equal
+from pandas.testing import assert_series_equal
 
 
 class TestToNumeric:
@@ -89,12 +89,16 @@ class TestToNumeric:
         assert result["int_str"].dtype in [np.int64, np.float64]
         assert result["float_str"].dtype == np.float64
 
-        # Pure string column should remain unchanged
-        assert result["pure_str"].dtype == object
+        # Pure string column should remain unchanged (object or StringDtype on pandas 2.3+)
+        assert result["pure_str"].dtype == object or pd.api.types.is_string_dtype(
+            result["pure_str"]
+        )
         assert list(result["pure_str"]) == ["a", "b", "c", "d"]
 
         # Mixed column should remain unchanged (has non-numeric values)
-        assert result["mixed"].dtype == object
+        assert result["mixed"].dtype == object or pd.api.types.is_string_dtype(
+            result["mixed"]
+        )
         assert list(result["mixed"]) == ["1", "2.5", "three", "4"]
 
     def test_raise_mode(self):
@@ -239,8 +243,10 @@ class TestToNumeric:
         original_values = mixed_df["int_str"].copy()
         result = to_numeric(mixed_df)
 
-        # Original should be unchanged
-        assert mixed_df["int_str"].dtype == object
+        # Original should be unchanged (object or StringDtype on pandas 2.3+)
+        assert mixed_df["int_str"].dtype == object or pd.api.types.is_string_dtype(
+            mixed_df["int_str"]
+        )
         assert_series_equal(mixed_df["int_str"], original_values)
 
         # Result should be numeric
