@@ -5,7 +5,6 @@
 
 import os
 import sys
-from unittest.mock import Mock, patch
 
 import numpy as np
 import pandas as pd
@@ -187,8 +186,11 @@ class TestDataTypes:
         result = melt_cols(df, cols=["cat1", "cat2"])
 
         assert len(result) == 6
-        # When melting multiple categorical columns, pandas converts to object dtype
-        assert result["value"].dtype == object
+        # When melting multiple categorical columns, pandas may produce either
+        # object dtype (pandas 1.x) or StringDtype (pandas 2.x). Accept either.
+        assert result["value"].dtype == object or pd.api.types.is_string_dtype(
+            result["value"]
+        )
         # But the values themselves are still from the original categories
         assert set(result["value"]) == {"A", "B", "C", "X", "Y", "Z"}
 
@@ -261,7 +263,9 @@ class TestNullHandling:
 
         assert len(result) == 3
         assert pd.isna(result.iloc[1]["id"])
-        assert result.iloc[2]["name"] is None
+        # pandas 1.x preserves None in object columns; pandas 2.x may convert
+        # to NaN. Accept either by checking for null-ness rather than identity.
+        assert pd.isna(result.iloc[2]["name"])
 
 
 class TestIndexHandling:
