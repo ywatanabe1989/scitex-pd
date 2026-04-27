@@ -4,14 +4,36 @@
 # File: ./tests/scitex/pd/test__ignore_SettingWithCopyWarning.py
 
 import os
-import sys
-import tempfile
 import warnings
-from unittest.mock import MagicMock, Mock, patch
 
 import numpy as np
 import pandas as pd
 import pytest
+
+
+# pandas >=2.2 removed SettingWithCopyWarning entirely (Copy-on-Write is now
+# the default). The tests in this module exercise a context manager that
+# silences that warning class; if pandas no longer exposes it, the whole
+# behaviour under test is moot, so skip the module rather than fail.
+def _settingwithcopywarning_available() -> bool:
+    try:
+        from pandas.errors import SettingWithCopyWarning  # noqa: F401
+
+        return True
+    except ImportError:
+        pass
+    try:
+        from pandas.core.common import SettingWithCopyWarning  # noqa: F401
+
+        return True
+    except ImportError:
+        return False
+
+
+pytestmark = pytest.mark.skipif(
+    not _settingwithcopywarning_available(),
+    reason="pandas >=2.2 removed SettingWithCopyWarning; nothing to suppress.",
+)
 
 
 class TestIgnoreSettingWithCopyWarningBasic:

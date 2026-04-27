@@ -17,14 +17,22 @@ def ignore_setting_with_copy_warning():
     >>> with ignore_SettingWithCopyWarning():
     ...     df['column'] = new_values  # No warning will be shown
     """
+    SettingWithCopyWarning = None
     try:
-        from pandas.errors import SettingWithCopyWarning
+        from pandas.errors import SettingWithCopyWarning  # pandas <2.2
     except ImportError:
-        from pandas.core.common import SettingWithCopyWarning
+        try:
+            from pandas.core.common import SettingWithCopyWarning  # pandas <2.0
+        except ImportError:
+            SettingWithCopyWarning = None  # pandas >=2.2 removed this warning class
 
     # Save current warning filters
     with warnings.catch_warnings():
-        warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+        if SettingWithCopyWarning is not None:
+            warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+        else:
+            # In pandas >=2.2 the warning was removed; nothing to suppress.
+            pass
         yield
 
 

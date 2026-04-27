@@ -4,9 +4,6 @@
 # File: ./tests/scitex/pd/test__force_df.py
 
 import os
-import sys
-import tempfile
-from unittest.mock import MagicMock, Mock, patch
 
 import numpy as np
 import pandas as pd
@@ -245,7 +242,10 @@ class TestForceDfEdgeCases:
         assert result.shape == (3, 5)
         assert result["int"].dtype == "int64"
         assert result["float"].dtype == "float64"
-        assert result["str"].dtype == "object"
+        # pandas 2.x may use StringDtype for object columns; accept both.
+        assert pd.api.types.is_string_dtype(
+            result["str"]
+        ) or pd.api.types.is_object_dtype(result["str"])
         assert result["bool"].dtype == "bool"
 
     def test_single_value_dict(self):
