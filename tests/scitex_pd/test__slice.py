@@ -5,9 +5,6 @@
 
 import builtins
 import os
-import sys
-import tempfile
-from unittest.mock import MagicMock, Mock, patch
 
 import numpy as np
 import pandas as pd
@@ -354,7 +351,7 @@ class TestRealWorldScenarios:
 
         df = pd.DataFrame(
             {
-                "timestamp": pd.date_range("2023-01-01", periods=100, freq="H"),
+                "timestamp": pd.date_range("2023-01-01", periods=100, freq="h"),
                 "value": np.random.randn(100),
             }
         )
