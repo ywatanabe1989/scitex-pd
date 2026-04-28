@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """scitex-pd — pandas helpers (force_df, melt_cols, find_pval, mv, etc) — standalone."""
 
-__version__ = "0.1.0"
-
+try:
+    from importlib.metadata import version as _v, PackageNotFoundError
+    try:
+        __version__ = _v("scitex-pd")
+    except PackageNotFoundError:
+        __version__ = "0.0.0+local"
+    del _v, PackageNotFoundError
+except ImportError:  # pragma: no cover — only on ancient Pythons
+    __version__ = "0.0.0+local"
 from ._find_indi import find_indi
 from ._find_pval import _find_pval_col, find_pval
 from ._force_df import force_df
