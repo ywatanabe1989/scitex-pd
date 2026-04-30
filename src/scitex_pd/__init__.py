@@ -36,7 +36,6 @@ __all__ = [
     "__version__",
     "find_indi",
     "find_pval",
-    "_find_pval_col",
     "force_df",
     "from_xyz",
     "get_unique",
