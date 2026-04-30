@@ -76,5 +76,3 @@ with spd.ignore_setting_with_copy_warning():
 
 - `scitex-stats` — statistical tests that consume `find_pval` outputs
 - `scitex-plt` — plotting hooks that pair with `to_xy`/`from_xyz`
-
-<!-- EOF -->
