@@ -1,0 +1,732 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_pd &mdash; scitex-pd 0.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="API" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            scitex-pd
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_pd</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.find_indi"><code class="docutils literal notranslate"><span class="pre">find_indi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.find_pval"><code class="docutils literal notranslate"><span class="pre">find_pval()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.force_df"><code class="docutils literal notranslate"><span class="pre">force_df()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.from_xyz"><code class="docutils literal notranslate"><span class="pre">from_xyz()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.get_unique"><code class="docutils literal notranslate"><span class="pre">get_unique()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.ignore_SettingWithCopyWarning"><code class="docutils literal notranslate"><span class="pre">ignore_SettingWithCopyWarning()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.ignore_setting_with_copy_warning"><code class="docutils literal notranslate"><span class="pre">ignore_setting_with_copy_warning()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.melt_cols"><code class="docutils literal notranslate"><span class="pre">melt_cols()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.merge_cols"><code class="docutils literal notranslate"><span class="pre">merge_cols()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.merge_columns"><code class="docutils literal notranslate"><span class="pre">merge_columns()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.mv"><code class="docutils literal notranslate"><span class="pre">mv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.mv_to_first"><code class="docutils literal notranslate"><span class="pre">mv_to_first()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.mv_to_last"><code class="docutils literal notranslate"><span class="pre">mv_to_last()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.replace"><code class="docutils literal notranslate"><span class="pre">replace()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.round"><code class="docutils literal notranslate"><span class="pre">round()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.slice"><code class="docutils literal notranslate"><span class="pre">slice()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.sort"><code class="docutils literal notranslate"><span class="pre">sort()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.to_numeric"><code class="docutils literal notranslate"><span class="pre">to_numeric()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.to_xy"><code class="docutils literal notranslate"><span class="pre">to_xy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_pd.to_xyz"><code class="docutils literal notranslate"><span class="pre">to_xyz()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scitex-pd</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">scitex_pd</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/scitex_pd.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-scitex_pd">
+<span id="scitex-pd"></span><h1>scitex_pd<a class="headerlink" href="#module-scitex_pd" title="Link to this heading"></a></h1>
+<p>scitex-pd — pandas helpers (force_df, melt_cols, find_pval, mv, etc) — standalone.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.find_indi">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">find_indi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_find_indi.html#find_indi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.find_indi" title="Link to this definition"></a></dt>
+<dd><p>Finds indices of rows that satisfy conditions, handling NaN values.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">find_indi</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>conditions</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>List</em><em>]</em><em>]</em>) – Column conditions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of integer indices of matching rows</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.find_pval">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">find_pval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_find_pval.html#find_pval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.find_pval" title="Link to this definition"></a></dt>
+<dd><p>Find p-value column name(s) or key(s) in various data structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span></p>
+</dd>
+</dl>
+<section id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;p_value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span> <span class="s1">&#39;pval&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">find_pval</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">[&#39;p_value&#39;, &#39;pval&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">find_pval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">&#39;p_value&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">Union[pd.DataFrame, np.ndarray, List, Dict]</span></dt><dd><p>Data structure to search for p-value column or key</p>
+</dd>
+<dt>multiple<span class="classifier">bool, optional</span></dt><dd><p>If True, return all matches; if False, return only the first match (default is True)</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<p>:
+Union[Optional[str], List[str]]</p>
+<blockquote>
+<div><p>Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.force_df">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">force_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_force_df.html#force_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.force_df" title="Link to this definition"></a></dt>
+<dd><p>Convert various data types to pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>various</em>) – The data to convert to DataFrame. Can be DataFrame, Series, ndarray,
+list, tuple, dict, scalar value, etc.</p></li>
+<li><p><strong>filler</strong> (<em>any</em><em>, </em><em>optional</em>) – Value to use for filling missing values, by default np.nan</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Data converted to DataFrame</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</pre></div>
+</div>
+<p># DataFrame input returns the same DataFrame
+&gt;&gt;&gt; df = pd.DataFrame({‘A’: [1, 2, 3], ‘B’: [4, 5, 6]})
+&gt;&gt;&gt; scitex.pd.force_df(df) is df
+True</p>
+<p># Series input is converted to DataFrame
+&gt;&gt;&gt; series = pd.Series([1, 2, 3], name=’test’)
+&gt;&gt;&gt; scitex.pd.force_df(series)</p>
+<blockquote>
+<div><p>test</p>
+</div></blockquote>
+<p>0     1
+1     2
+2     3</p>
+<p># NumPy array input is converted to DataFrame
+&gt;&gt;&gt; arr = np.array([1, 2, 3])
+&gt;&gt;&gt; scitex.pd.force_df(arr)</p>
+<blockquote>
+<div><p>value</p>
+</div></blockquote>
+<p>0      1
+1      2
+2      3</p>
+<p># Scalar values are converted to single-value DataFrames
+&gt;&gt;&gt; scitex.pd.force_df(42)</p>
+<blockquote>
+<div><p>value</p>
+</div></blockquote>
+<p>0     42</p>
+<p># Lists and tuples are converted to DataFrame
+&gt;&gt;&gt; scitex.pd.force_df([1, 2, 3])</p>
+<blockquote>
+<div><p>value</p>
+</div></blockquote>
+<p>0      1
+1      2
+2      3</p>
+<p># Dictionaries are converted to DataFrame with appropriate handling
+# of different length values
+&gt;&gt;&gt; data = {‘A’: [1, 2, 3], ‘B’: [4, 5]}
+&gt;&gt;&gt; scitex.pd.force_df(data)</p>
+<blockquote>
+<div><p>A  B</p>
+</div></blockquote>
+<p>0  1  4
+1  2  5
+2  3  NaN</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.from_xyz">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_convert/_from_xyz.html#from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.from_xyz" title="Link to this definition"></a></dt>
+<dd><p>Convert a DataFrame with ‘x’, ‘y’, ‘z’ format into a heatmap DataFrame.</p>
+<p class="rubric">Example</p>
+<p>import pandas as pd
+data = pd.DataFrame({</p>
+<blockquote>
+<div><p>‘col1’: [‘A’, ‘B’, ‘C’, ‘A’],
+‘col2’: [‘X’, ‘Y’, ‘Z’, ‘Y’],
+‘p_val’: [0.01, 0.05, 0.001, 0.1]</p>
+</div></blockquote>
+<p>})
+data = data.rename(columns={“col1”: “x”, “col2”: “y”, “p_val”: “z”})
+result = from_xyz(data)
+print(result)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_frame</strong> (<em>pandas.DataFrame</em>) – Input DataFrame with columns for x, y, and z values.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the column to use as x-axis. Defaults to ‘x’.</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the column to use as y-axis. Defaults to ‘y’.</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the column to use as z-values. Defaults to ‘z’.</p></li>
+<li><p><strong>square</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, force the output to be a square matrix. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame in heatmap/pivot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.get_unique">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">get_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_on_multiple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_get_unique.html#get_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.get_unique" title="Link to this definition"></a></dt>
+<dd><p>Get value from column if it contains a unique value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – DataFrame to extract from</p></li>
+<li><p><strong>column</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Column name to check</p></li>
+<li><p><strong>default</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Default value if column doesn’t exist or has multiple unique values</p></li>
+<li><p><strong>raise_on_multiple</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, raise ValueError when multiple unique values exist</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unique value if exactly one exists, otherwise default value</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;patient_id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P01&#39;</span><span class="p">,</span> <span class="s1">&#39;P01&#39;</span><span class="p">,</span> <span class="s1">&#39;P01&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_unique</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;patient_id&#39;</span><span class="p">)</span>
+<span class="go">&#39;P01&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;patient_id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P01&#39;</span><span class="p">,</span> <span class="s1">&#39;P02&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_unique</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;patient_id&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+<span class="go">&#39;Unknown&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Raise error on multiple values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_unique</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;patient_id&#39;</span><span class="p">,</span> <span class="n">raise_on_multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">ValueError: Column &#39;patient_id&#39; has 2 unique values: [&#39;P01&#39;, &#39;P02&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.ignore_SettingWithCopyWarning">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">ignore_SettingWithCopyWarning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scitex_pd.ignore_SettingWithCopyWarning" title="Link to this definition"></a></dt>
+<dd><p>Context manager to temporarily ignore pandas SettingWithCopyWarning.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ignore_SettingWithCopyWarning</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_values</span>  <span class="c1"># No warning will be shown</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.ignore_setting_with_copy_warning">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">ignore_setting_with_copy_warning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_ignore_SettingWithCopyWarning.html#ignore_setting_with_copy_warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.ignore_setting_with_copy_warning" title="Link to this definition"></a></dt>
+<dd><p>Context manager to temporarily ignore pandas SettingWithCopyWarning.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ignore_SettingWithCopyWarning</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_values</span>  <span class="c1"># No warning will be shown</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.melt_cols">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">melt_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_melt_cols.html#melt_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.melt_cols" title="Link to this definition"></a></dt>
+<dd><p>Melt specified columns while preserving links to other data in a DataFrame.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;Charlie&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;score_1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">85</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">78</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;score_2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">92</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">melted</span> <span class="o">=</span> <span class="n">melt_cols</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;score_1&#39;</span><span class="p">,</span> <span class="s1">&#39;score_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">melted</span><span class="p">)</span>
+<span class="go">   id     name variable  value</span>
+<span class="go">0   1    Alice  score_1     85</span>
+<span class="go">1   2      Bob  score_1     90</span>
+<span class="go">2   3  Charlie  score_1     78</span>
+<span class="go">3   1    Alice  score_2     92</span>
+<span class="go">4   2      Bob  score_2     88</span>
+<span class="go">5   3  Charlie  score_2     95</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>cols</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Columns to be melted</p></li>
+<li><p><strong>id_columns</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default None</em>) – Columns to preserve as identifiers. If None, all columns not in ‘cols’ are used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Melted DataFrame with preserved identifier columns</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If cols are not present in the DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.merge_cols">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">merge_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'merged'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scitex_pd.merge_cols" title="Link to this definition"></a></dt>
+<dd><p>Creates a new column by joining specified columns.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Simple concatenation with separator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merge_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="go">   A  B  C    A_B</span>
+<span class="go">0  0  1  2    0 1</span>
+<span class="go">1  5  6  7    5 6</span>
+<span class="go">2 10 11 12  10 11</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With column labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merge_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">sep1</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">sep2</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">   A  B  C        A_B</span>
+<span class="go">0  0  1  2    A-0_B-1</span>
+<span class="go">1  5  6  7    A-5_B-6</span>
+<span class="go">2 10 11 12  A-10_B-11</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>*args</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>...</em><em>]</em><em>]</em>) – Column names to join</p></li>
+<li><p><strong>sep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Simple separator for values only (overrides sep1/sep2)</p></li>
+<li><p><strong>sep1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Separator between column-value pairs, by default “_”</p></li>
+<li><p><strong>sep2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Separator between column name and value, by default “-”</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name for the merged column, by default “merged”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with added merged column</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.merge_columns">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">merge_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'merged'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_merge_columns.html#merge_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.merge_columns" title="Link to this definition"></a></dt>
+<dd><p>Creates a new column by joining specified columns.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Simple concatenation with separator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merge_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="go">   A  B  C    A_B</span>
+<span class="go">0  0  1  2    0 1</span>
+<span class="go">1  5  6  7    5 6</span>
+<span class="go">2 10 11 12  10 11</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With column labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merge_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">sep1</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">sep2</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">   A  B  C        A_B</span>
+<span class="go">0  0  1  2    A-0_B-1</span>
+<span class="go">1  5  6  7    A-5_B-6</span>
+<span class="go">2 10 11 12  A-10_B-11</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>*args</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>...</em><em>]</em><em>]</em>) – Column names to join</p></li>
+<li><p><strong>sep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Simple separator for values only (overrides sep1/sep2)</p></li>
+<li><p><strong>sep1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Separator between column-value pairs, by default “_”</p></li>
+<li><p><strong>sep2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Separator between column name and value, by default “-”</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name for the merged column, by default “merged”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with added merged column</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.mv">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_mv.html#mv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.mv" title="Link to this definition"></a></dt>
+<dd><p>Move a row or column to a specified position in a DataFrame.</p>
+<p>Args:
+df (pandas.DataFrame): The input DataFrame.
+key (str): The label of the row or column to move.
+position (int): The position to move the row or column to.
+axis (int, optional): 0 for rows, 1 for columns. Defaults to 1.</p>
+<p>Returns:
+pandas.DataFrame: A new DataFrame with the row or column moved.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.mv_to_first">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">mv_to_first</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_mv.html#mv_to_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.mv_to_first" title="Link to this definition"></a></dt>
+<dd><p>Move a row or column to the first position in a DataFrame.</p>
+<p>Args:
+df (pandas.DataFrame): The input DataFrame.
+key (str): The label of the row or column to move.
+axis (int, optional): 0 for rows, 1 for columns. Defaults to 1.</p>
+<p>Returns:
+pandas.DataFrame: A new DataFrame with the row or column moved to the first position.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.mv_to_last">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">mv_to_last</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_mv.html#mv_to_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.mv_to_last" title="Link to this definition"></a></dt>
+<dd><p>Move a row or column to the last position in a DataFrame.</p>
+<p>Args:
+df (pandas.DataFrame): The input DataFrame.
+key (str): The label of the row or column to move.
+axis (int, optional): 0 for rows, 1 for columns. Defaults to 1.</p>
+<p>Returns:
+pandas.DataFrame: A new DataFrame with the row or column moved to the last position.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.replace">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_replace.html#replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.replace" title="Link to this definition"></a></dt>
+<dd><p>Replace values in a DataFrame.</p>
+<p class="rubric">Example</p>
+<p>import pandas as pd
+df = pd.DataFrame({‘A’: [‘abc-123’, ‘def-456’], ‘B’: [‘ghi-789’, ‘jkl-012’]})</p>
+<p># Replace single value
+df_replaced = replace(df, ‘abc’, ‘xyz’)</p>
+<p># Replace with dictionary
+replace_dict = {‘-’: ‘_’, ‘1’: ‘one’}
+df_replaced = replace(df, replace_dict, cols=[‘A’])
+print(df_replaced)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pandas.DataFrame</em>) – Input DataFrame to modify.</p></li>
+<li><p><strong>old_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – If str, the value to replace (requires new_value).
+If dict, mapping of old values (keys) to new values (values).</p></li>
+<li><p><strong>new_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – New value to replace old_value with. Required if old_value is str.</p></li>
+<li><p><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, treat replacement keys as regular expressions. Default is False.</p></li>
+<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – List of column names to apply replacements. If None, apply to all columns.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with specified replacements applied.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.round">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_round.html#round"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.round" title="Link to this definition"></a></dt>
+<dd><p>Round numeric values in a DataFrame to a specified number of decimal places.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.23456</span><span class="p">,</span> <span class="mf">2.34567</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;def&#39;</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">      A    B  C</span>
+<span class="go">0  1.23  abc  3</span>
+<span class="go">1  2.35  def  4</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decimal places to round to (default is 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with rounded numeric values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.slice">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_slice.html#slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.slice" title="Link to this definition"></a></dt>
+<dd><p>Slices DataFrame rows and/or columns.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Slice by row indices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Slice by conditions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Slice columns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame to slice</p></li>
+<li><p><strong>conditions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.14)"><em>slice</em></a><em>, </em><em>Dict</em><em>, or </em><em>None</em>) – Either a slice object for row indices, or a dictionary of column conditions</p></li>
+<li><p><strong>columns</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – List of column names to select</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sliced DataFrame</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.sort">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'quicksort'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">na_position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'last'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_sort.html#sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.sort" title="Link to this definition"></a></dt>
+<dd><p>Sort DataFrame by specified column(s) with optional custom ordering and column reordering.</p>
+<p class="rubric">Example</p>
+<p>import pandas as pd
+df = pd.DataFrame({‘A’: [‘foo’, ‘bar’, ‘baz’], ‘B’: [3, 2, 1]})
+custom_order = {‘A’: [‘bar’, ‘baz’, ‘foo’]}
+sorted_df = sort(df, by=None, orders=custom_order)
+print(sorted_df)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pandas.DataFrame</em>) – The DataFrame to sort.</p></li>
+<li><p><strong>by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Name(s) of column(s) to sort by.</p></li>
+<li><p><strong>ascending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default True</em>) – Sort ascending vs. descending.</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default False</em>) – If True, perform operation in-place.</p></li>
+<li><p><strong>kind</strong> (<em>{'quicksort'</em><em>, </em><em>'mergesort'</em><em>, </em><em>'heapsort'</em><em>, </em><em>'stable'}</em><em>, </em><em>default 'quicksort'</em>) – Choice of sorting algorithm.</p></li>
+<li><p><strong>na_position</strong> (<em>{'first'</em><em>, </em><em>'last'}</em><em>, </em><em>default 'last'</em>) – Puts NaNs at the beginning if ‘first’; ‘last’ puts NaNs at the end.</p></li>
+<li><p><strong>ignore_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default False</em>) – If True, the resulting axis will be labeled 0, 1, …, n - 1.</p></li>
+<li><p><strong>key</strong> (<em>callable</em><em>, </em><em>optional</em>) – Apply the key function to the values before sorting.</p></li>
+<li><p><strong>orders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of column names and their custom sort orders.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sorted DataFrame with reordered columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.to_numeric">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">to_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'coerce'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_convert/_to_numeric.html#to_numeric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.to_numeric" title="Link to this definition"></a></dt>
+<dd><p>Convert all possible columns in a DataFrame to numeric types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input DataFrame</p></li>
+<li><p><strong>errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle errors. ‘coerce’ (default) converts invalid values to NaN,
+‘ignore’ leaves non-numeric columns unchanged, ‘raise’ raises exceptions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with numeric columns converted</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.to_xy">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">to_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_convert/_to_xy.html#to_xy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.to_xy" title="Link to this definition"></a></dt>
+<dd><p>Convert a heatmap DataFrame into x, y, z format.</p>
+<p>Ensure the index and columns are the same, and if either exists, replace with that.</p>
+<p class="rubric">Example</p>
+<p>data_frame = pd.DataFrame(…)  # Your DataFrame here
+out = to_xy(data_frame)
+print(out)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_frame</strong> (<em>pandas.DataFrame</em>) – The input DataFrame to be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame formatted with columns [‘x’, ‘y’, ‘z’]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_pd.to_xyz">
+<span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_convert/_to_xyz.html#to_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.to_xyz" title="Link to this definition"></a></dt>
+<dd><p>Convert a DataFrame into x, y, z format (long format).</p>
+<p>Transforms a DataFrame from wide format (matrix/heatmap) to long format
+where each value becomes a row with x (row index), y (column name),
+and z (value) columns.</p>
+<p class="rubric">Example</p>
+<p>data_frame = pd.DataFrame(…)  # Your DataFrame here
+out = to_xyz(data_frame)
+print(out)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_frame</strong> (<em>pandas.DataFrame</em>) – The input DataFrame to be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame formatted with columns [‘x’, ‘y’, ‘z’]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
