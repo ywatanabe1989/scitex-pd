@@ -90,7 +90,7 @@ The umbrella package's `scitex.pd` import path is preserved via a
 
 `scitex-pd` is part of [**SciTeX**](https://scitex.ai). Install via
 the umbrella with `pip install scitex[pd]` to use as
-`scitex.pd` (Python).
+`scitex.pd` (Python) or `scitex pd ...` (CLI).
 
 >Four Freedoms for Research
 >
