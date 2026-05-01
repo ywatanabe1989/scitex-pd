@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 try:
-    from importlib.metadata import version as _v, PackageNotFoundError
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as _v
+
     try:
         __version__ = _v("scitex-pd")
     except PackageNotFoundError:
@@ -12,10 +14,13 @@ try:
     del _v, PackageNotFoundError
 except ImportError:  # pragma: no cover — only on ancient Pythons
     __version__ = "0.0.0+local"
+from ._convert._from_xyz import from_xyz
+from ._convert._to_numeric import to_numeric
+from ._convert._to_xy import to_xy
+from ._convert._to_xyz import to_xyz
 from ._find_indi import find_indi
 from ._find_pval import _find_pval_col, find_pval
 from ._force_df import force_df
-from ._from_xyz import from_xyz
 from ._get_unique import get_unique
 from ._ignore_SettingWithCopyWarning import (
     ignore_setting_with_copy_warning,
@@ -28,9 +33,6 @@ from ._replace import replace
 from ._round import round
 from ._slice import slice
 from ._sort import sort
-from ._to_numeric import to_numeric
-from ._to_xy import to_xy
-from ._to_xyz import to_xyz
 
 __all__ = [
     "__version__",
