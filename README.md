@@ -43,7 +43,7 @@ pd_.find_pval(df)               # Locate p-value columns
 
 ## 1 Interfaces
 
-<details>
+<details open>
 <summary><strong>Python API</strong></summary>
 
 <br>
