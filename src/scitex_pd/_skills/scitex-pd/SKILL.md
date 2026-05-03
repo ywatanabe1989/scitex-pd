@@ -1,6 +1,10 @@
 ---
 name: scitex-pd
-description: pandas helpers extracted from the SciTeX ecosystem. `force_df(x)` coerces anything (Series, dict, list-of-dicts, ndarray) into a `DataFrame` with sensible column names. `melt_cols(df, id_vars, ...)` is `pd.melt` with column-name patterns instead of explicit lists. `find_pval(df)` / `find_indi(df)` locate p-value and indicator columns by convention. `to_xy`/`to_xyz`/`from_xyz` reshape between long-form coordinate frames and wide. `mv`, `mv_to_first`, `mv_to_last` reorder columns by name without a verbose `df[[...]]` assignment. `get_unique`, `merge_cols`, `replace`, `round`, `slice`, `sort`, `to_numeric` are short-form helpers for the most common dataframe-massaging steps. Drop-in replacement for ten-line `if isinstance(x, ...): elif ...: ...` constructors and bespoke `df.columns.tolist()[:i] + ['x'] + df.columns.tolist()[i+1:]` reorderings.
+description: |
+  [WHAT] pandas helpers extracted from the SciTeX ecosystem.
+  [WHEN] Use when working with scitex-pd APIs or when the user mentions scitex.pd..
+  [HOW] `import scitex_pd` then call `force_df(x)`.
+tags: [scitex-pd]
 primary_interface: python
 interfaces:
   python: 3
@@ -10,8 +14,8 @@ interfaces:
   hook: 0
   http: 0
 canonical-location: scitex-pd/src/scitex_pd/_skills/scitex-pd/SKILL.md
-tags: [scitex-pd, scitex-package, pandas, dataframe, helpers]
 ---
+
 
 > **Interfaces:** Python ⭐⭐⭐ (primary) · CLI — · MCP — · Skills ⭐⭐ · Hook — · HTTP —
 
