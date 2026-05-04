@@ -24,6 +24,12 @@ canonical-location: scitex-pd/src/scitex_pd/_skills/scitex-pd/SKILL.md
 Conventional pandas helpers — replaces the boilerplate that everyone
 re-writes when massaging dataframes for analysis.
 
+## Sub-skills
+
+- [01_installation.md](01_installation.md) — pip install + verify
+- [02_quick-start.md](02_quick-start.md) — coerce + reshape + finders
+- [03_python-api.md](03_python-api.md) — full public surface
+
 ## Coercion + reshape
 
 ```python
