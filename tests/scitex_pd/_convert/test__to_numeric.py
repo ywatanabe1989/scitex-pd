@@ -44,13 +44,13 @@ class TestToNumeric:
 
     def test_import(self):
         """Test that to_numeric can be imported."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         assert callable(to_numeric)
 
     def test_basic_conversion(self, mixed_df):
         """Test basic numeric conversion with coerce."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         result = to_numeric(mixed_df)
 
@@ -66,7 +66,7 @@ class TestToNumeric:
 
     def test_coerce_mode(self, mixed_df):
         """Test coerce mode converts invalid values to NaN."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         result = to_numeric(mixed_df, errors="coerce")
 
@@ -81,7 +81,7 @@ class TestToNumeric:
 
     def test_ignore_mode(self, mixed_df):
         """Test ignore mode leaves non-numeric columns unchanged."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         result = to_numeric(mixed_df, errors="ignore")
 
@@ -103,7 +103,7 @@ class TestToNumeric:
 
     def test_raise_mode(self):
         """Test raise mode raises exception on invalid conversion."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame({"valid": ["1", "2", "3"], "invalid": ["1", "two", "3"]})
 
@@ -113,7 +113,7 @@ class TestToNumeric:
 
     def test_with_nan_values(self, mixed_df):
         """Test handling of NaN values."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         result = to_numeric(mixed_df)
 
@@ -125,7 +125,7 @@ class TestToNumeric:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame()
         result = to_numeric(df)
@@ -139,7 +139,7 @@ class TestToNumeric:
 
     def test_single_column_dataframe(self):
         """Test with single column DataFrame."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame({"A": ["1", "2", "3"]})
         result = to_numeric(df)
@@ -148,7 +148,7 @@ class TestToNumeric:
 
     def test_scientific_notation(self):
         """Test conversion of scientific notation strings."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {"sci": ["1e3", "2.5e-2", "3E+4"], "normal": ["1000", "0.025", "30000"]}
@@ -161,7 +161,7 @@ class TestToNumeric:
 
     def test_boolean_strings(self):
         """Test conversion of boolean-like strings."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {"bool_str": ["True", "False", "True"], "bool_num": ["1", "0", "1"]}
@@ -175,7 +175,7 @@ class TestToNumeric:
 
     def test_preserve_dtypes_when_possible(self):
         """Test that already numeric columns preserve their dtypes."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {
@@ -193,7 +193,7 @@ class TestToNumeric:
 
     def test_whitespace_handling(self):
         """Test handling of whitespace in numeric strings."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {
@@ -208,7 +208,7 @@ class TestToNumeric:
 
     def test_currency_symbols(self):
         """Test handling of currency symbols."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {
@@ -224,7 +224,7 @@ class TestToNumeric:
 
     def test_percentage_strings(self):
         """Test handling of percentage strings."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame(
             {"percent": ["10%", "20.5%", "30%"], "decimal": ["0.1", "0.205", "0.3"]}
@@ -238,7 +238,7 @@ class TestToNumeric:
 
     def test_copy_behavior(self, mixed_df):
         """Test that the function returns a copy, not modifying the original."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         original_values = mixed_df["int_str"].copy()
         result = to_numeric(mixed_df)
@@ -255,7 +255,7 @@ class TestToNumeric:
     @pytest.mark.parametrize("errors", ["coerce", "ignore"])
     def test_consistent_behavior(self, errors):
         """Test consistent behavior across different error modes."""
-        from scitex.pd import to_numeric
+        from scitex_pd import to_numeric
 
         df = pd.DataFrame({"nums": ["1", "2", "3"], "mixed": ["1", "a", "3"]})
 

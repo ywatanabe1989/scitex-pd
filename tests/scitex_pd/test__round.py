@@ -17,7 +17,7 @@ class TestRound:
 
     def test_basic_float_rounding(self):
         """Test basic rounding of float values."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"A": [1.23456, 2.34567, 3.45678], "B": [4.56789, 5.67890, 6.78901]}
@@ -30,7 +30,7 @@ class TestRound:
 
     def test_default_factor(self):
         """Test rounding with default factor of 3."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"value": [1.234567, 2.345678, 3.456789]})
 
@@ -41,7 +41,7 @@ class TestRound:
 
     def test_mixed_types(self):
         """Test rounding with mixed data types."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -66,7 +66,7 @@ class TestRound:
 
     def test_integer_preservation(self):
         """Test that integer columns remain as integers."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
 
@@ -78,7 +78,7 @@ class TestRound:
 
     def test_zero_decimal_places(self):
         """Test rounding to zero decimal places."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1.4, 2.5, 3.6], "B": [4.4, 5.5, 6.6]})
 
@@ -89,7 +89,7 @@ class TestRound:
 
     def test_large_factor(self):
         """Test rounding with large factor value."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1.123456789, 2.234567890]})
 
@@ -100,7 +100,7 @@ class TestRound:
 
     def test_negative_values(self):
         """Test rounding negative values."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"A": [-1.23456, -2.34567, -3.45678], "B": [1.23456, -2.34567, 3.45678]}
@@ -113,7 +113,7 @@ class TestRound:
 
     def test_nan_handling(self):
         """Test handling of NaN values - columns with NaN are not rounded due to comparison issue."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -137,7 +137,7 @@ class TestRound:
 
     def test_inf_handling(self):
         """Test handling of infinity values - columns with inf are not rounded."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -161,7 +161,7 @@ class TestRound:
 
     def test_empty_dataframe(self):
         """Test rounding empty DataFrame."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame()
         result = round(df, factor=2)
@@ -169,7 +169,7 @@ class TestRound:
 
     def test_single_column(self):
         """Test rounding single column DataFrame."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"values": [1.234567, 2.345678, 3.456789]})
         result = round(df, factor=3)
@@ -179,7 +179,7 @@ class TestRound:
 
     def test_datetime_columns(self):
         """Test that datetime columns are preserved."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         dates = pd.date_range("2024-01-01", periods=3)
         df = pd.DataFrame({"date": dates, "value": [1.23456, 2.34567, 3.45678]})
@@ -191,7 +191,7 @@ class TestRound:
 
     def test_categorical_columns(self):
         """Test that categorical columns are preserved."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -209,7 +209,7 @@ class TestRound:
 
     def test_scientific_notation(self):
         """Test rounding values in scientific notation."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"A": [1.234e-5, 2.345e-5, 3.456e-5], "B": [1.234e5, 2.345e5, 3.456e5]}
@@ -226,7 +226,7 @@ class TestRound:
 
     def test_very_small_values(self):
         """Test rounding very small values."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [0.000123456, 0.000234567, 0.000345678]})
 
@@ -238,7 +238,7 @@ class TestRound:
 
     def test_roundable_to_int(self):
         """Test values that can be converted to integers after rounding."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"A": [1.00001, 2.00002, 3.00003], "B": [4.99999, 5.99998, 6.99997]}
@@ -251,7 +251,7 @@ class TestRound:
 
     def test_multiindex_dataframe(self):
         """Test rounding DataFrame with MultiIndex."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         arrays = [["A", "A", "B", "B"], [1, 2, 1, 2]]
         index = pd.MultiIndex.from_arrays(arrays, names=["first", "second"])
@@ -264,7 +264,7 @@ class TestRound:
 
     def test_mixed_numeric_string(self):
         """Test DataFrame with numeric strings - object dtype columns are not converted."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"A": ["1.234", "2.345", "3.456"], "B": [1.234, 2.345, 3.456]}
@@ -281,7 +281,7 @@ class TestRound:
 
     def test_none_values(self):
         """Test handling of None values - NaN is preserved, other values are rounded."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -305,7 +305,7 @@ class TestRound:
 
     def test_object_dtype_with_numbers(self):
         """Test object dtype columns - object dtype columns are returned unchanged."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -327,7 +327,7 @@ class TestRound:
 
     def test_series_like_behavior(self):
         """Test that function preserves column order and names."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"Z": [1.234], "A": [2.345], "M": [3.456]})
 
@@ -340,7 +340,7 @@ class TestRound:
 
     def test_large_dataframe_performance(self):
         """Test performance with large DataFrame."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         # Create large DataFrame
         np.random.seed(42)
@@ -356,7 +356,7 @@ class TestRound:
 
     def test_factor_one(self):
         """Test rounding with factor=1."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1.234, 2.567, 3.891]})
 
@@ -367,7 +367,7 @@ class TestRound:
 
     def test_complex_mixed_data(self):
         """Test complex DataFrame with various types."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {
@@ -400,7 +400,7 @@ class TestRound:
 
     def test_edge_case_rounding(self):
         """Test edge cases in rounding (0.5 cases)."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1.125, 2.225, 3.335, 4.445, 5.555]})
 
@@ -412,7 +412,7 @@ class TestRound:
 
     def test_preserve_index(self):
         """Test that DataFrame index is preserved."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame({"A": [1.234, 2.345, 3.456]}, index=["x", "y", "z"])
 
@@ -423,7 +423,7 @@ class TestRound:
 
     def test_column_specific_behavior(self):
         """Test that rounding is applied column-wise."""
-        from scitex.pd import round
+        from scitex_pd import round
 
         df = pd.DataFrame(
             {"precise": [1.123456789, 2.234567890], "rough": [100.1, 200.2]}

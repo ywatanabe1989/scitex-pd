@@ -18,7 +18,7 @@ class TestFindPvalDataFrame:
 
     def test_single_pval_column(self):
         """Test finding single p-value column."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame({"p_value": [0.05, 0.01], "other": [1, 2]})
         result = find_pval(df, multiple=False)
@@ -27,7 +27,7 @@ class TestFindPvalDataFrame:
 
     def test_multiple_pval_columns(self):
         """Test finding multiple p-value columns."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {
@@ -44,7 +44,7 @@ class TestFindPvalDataFrame:
 
     def test_pvalue_variations(self):
         """Test various p-value column name variations."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {
@@ -66,7 +66,7 @@ class TestFindPvalDataFrame:
 
     def test_no_pval_columns(self):
         """Test when no p-value columns exist."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame({"alpha": [0.05], "beta": [0.1], "gamma": [1]})
         result = find_pval(df, multiple=False)
@@ -75,7 +75,7 @@ class TestFindPvalDataFrame:
 
     def test_no_pval_columns_multiple(self):
         """Test when no p-value columns exist with multiple=True."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame({"alpha": [0.05], "beta": [0.1], "gamma": [1]})
         result = find_pval(df, multiple=True)
@@ -84,7 +84,7 @@ class TestFindPvalDataFrame:
 
     def test_pval_stars_exclusion(self):
         """Test that p-value stars columns are excluded."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {
@@ -100,7 +100,7 @@ class TestFindPvalDataFrame:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame()
         result = find_pval(df, multiple=True)
@@ -113,7 +113,7 @@ class TestFindPvalDict:
 
     def test_dict_single_match(self):
         """Test finding p-value key in dictionary."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = {"p_value": 0.05, "coefficient": 1.2, "se": 0.1}
         result = find_pval(data, multiple=False)
@@ -122,7 +122,7 @@ class TestFindPvalDict:
 
     def test_dict_multiple_matches(self):
         """Test finding multiple p-value keys in dictionary."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = {"p_value": 0.05, "pval": 0.01, "p-val": 0.02, "coefficient": 1.2}
         result = find_pval(data, multiple=True)
@@ -131,7 +131,7 @@ class TestFindPvalDict:
 
     def test_dict_no_matches(self):
         """Test dictionary with no p-value keys."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = {"alpha": 0.05, "beta": 0.1, "gamma": 1}
         result = find_pval(data, multiple=False)
@@ -140,7 +140,7 @@ class TestFindPvalDict:
 
     def test_nested_dict(self):
         """Test with nested dictionary structure."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = {"results": {"p_value": 0.05}, "p_val": 0.01}
         result = find_pval(data, multiple=True)
@@ -154,7 +154,7 @@ class TestFindPvalList:
 
     def test_list_of_dicts(self):
         """Test list of dictionaries."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = [
             {"p_value": 0.05, "coef": 1.2},
@@ -167,7 +167,7 @@ class TestFindPvalList:
 
     def test_list_of_dicts_multiple_pvals(self):
         """Test list of dictionaries with multiple p-value keys."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = [
             {"p_value": 0.05, "pval": 0.06, "coef": 1.2},
@@ -179,7 +179,7 @@ class TestFindPvalList:
 
     def test_empty_list(self):
         """Test empty list."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = []
         result = find_pval(data, multiple=True)
@@ -188,7 +188,7 @@ class TestFindPvalList:
 
     def test_list_of_non_dicts(self):
         """Test list of non-dictionary items."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = [1, 2, 3, 4]
         result = find_pval(data, multiple=False)
@@ -201,7 +201,7 @@ class TestFindPvalNumPy:
 
     def test_numpy_array_of_dicts(self):
         """Test numpy array containing dictionaries."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = np.array(
             [{"p_value": 0.05, "stat": 2.1}, {"p_value": 0.01, "stat": 3.2}]
@@ -212,7 +212,7 @@ class TestFindPvalNumPy:
 
     def test_numpy_structured_array(self):
         """Test with numpy structured array."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         # Regular numpy arrays don't have column names
         data = np.array([1, 2, 3])
@@ -222,7 +222,7 @@ class TestFindPvalNumPy:
 
     def test_numpy_empty_array(self):
         """Test with empty numpy array."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         data = np.array([])
         result = find_pval(data, multiple=True)
@@ -235,7 +235,7 @@ class TestFindPvalEdgeCases:
 
     def test_case_insensitive(self):
         """Test case-insensitive matching."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {"P_VALUE": [0.05], "Pval": [0.01], "P-Val": [0.02], "PVALUE": [0.03]}
@@ -246,7 +246,7 @@ class TestFindPvalEdgeCases:
 
     def test_numeric_column_names(self):
         """Test with numeric column names."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame({0: [1, 2], 1: [3, 4], "p_value": [0.05, 0.01]})
         result = find_pval(df, multiple=False)
@@ -255,7 +255,7 @@ class TestFindPvalEdgeCases:
 
     def test_special_characters(self):
         """Test column names with special characters."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {"p.value": [0.05], "p$val": [0.01], "p_value!": [0.02], "normal": [1]}
@@ -269,14 +269,14 @@ class TestFindPvalEdgeCases:
 
     def test_invalid_input_type(self):
         """Test with invalid input type."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         with pytest.raises(ValueError, match="Input must be a pandas DataFrame"):
             find_pval("invalid_input")
 
     def test_partial_matches(self):
         """Test that partial matches work correctly."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {
@@ -297,7 +297,7 @@ class TestFindPvalDocumentation:
 
     def test_docstring_example_multiple(self):
         """Test the multiple=True example from docstring."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {"p_value": [0.05, 0.01], "pval": [0.1, 0.001], "other": [1, 2]}
@@ -308,7 +308,7 @@ class TestFindPvalDocumentation:
 
     def test_docstring_example_single(self):
         """Test the multiple=False example from docstring."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {"p_value": [0.05, 0.01], "pval": [0.1, 0.001], "other": [1, 2]}
@@ -319,7 +319,7 @@ class TestFindPvalDocumentation:
 
     def test_function_alias(self):
         """Test that _find_pval_col works directly."""
-        from scitex.pd import _find_pval_col
+        from scitex_pd import _find_pval_col
 
         df = pd.DataFrame({"p_value": [0.05], "data": [10]})
         result = _find_pval_col(df, multiple=False)
@@ -332,7 +332,7 @@ class TestFindPvalIntegration:
 
     def test_statistical_results_dataframe(self):
         """Test with typical statistical results DataFrame."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         df = pd.DataFrame(
             {
@@ -351,7 +351,7 @@ class TestFindPvalIntegration:
 
     def test_multiple_test_results(self):
         """Test with multiple test results format."""
-        from scitex.pd import find_pval
+        from scitex_pd import find_pval
 
         results = [
             {"test": "t-test", "statistic": 2.5, "pval": 0.012},

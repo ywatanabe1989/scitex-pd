@@ -35,13 +35,13 @@ class TestToXY:
 
     def test_import(self):
         """Test that to_xy can be imported."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         assert callable(to_xy)
 
     def test_basic_conversion(self, square_df):
         """Test basic conversion of square DataFrame."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         result = to_xy(square_df)
 
@@ -75,7 +75,7 @@ class TestToXY:
         The source code sets columns = index when index is numeric [0,1,2],
         so both become [0, 1, 2].
         """
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         result = to_xy(numeric_index_df)
 
@@ -96,7 +96,7 @@ class TestToXY:
         The source code sets index = columns when columns is numeric [0,1,2],
         so both become [0, 1, 2].
         """
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         result = to_xy(numeric_columns_df)
 
@@ -109,7 +109,7 @@ class TestToXY:
 
     def test_non_square_dataframe(self):
         """Test that non-square DataFrame raises assertion error."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         # Create non-square DataFrame
         df = pd.DataFrame(np.array([[1, 2], [3, 4], [5, 6]]))
@@ -119,7 +119,7 @@ class TestToXY:
 
     def test_identity_matrix(self):
         """Test conversion of identity matrix."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         # Create identity matrix
         data = np.eye(3)
@@ -137,7 +137,7 @@ class TestToXY:
 
     def test_single_element_dataframe(self):
         """Test conversion of 1x1 DataFrame."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         df = pd.DataFrame([[42]], index=["A"], columns=["A"])
         result = to_xy(df)
@@ -149,7 +149,7 @@ class TestToXY:
 
     def test_with_nan_values(self):
         """Test handling of NaN values."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         data = np.array([[1, np.nan, 3], [4, 5, np.nan], [np.nan, 8, 9]])
         df = pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
@@ -162,7 +162,7 @@ class TestToXY:
 
     def test_column_order_preserved(self, square_df):
         """Test that the order of columns is preserved in output."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         result = to_xy(square_df)
 
@@ -175,7 +175,7 @@ class TestToXY:
 
     def test_index_order_preserved(self, square_df):
         """Test that the order of index is preserved in output."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         result = to_xy(square_df)
 
@@ -190,7 +190,7 @@ class TestToXY:
         Series, which causes AttributeError since DataFrame has no .name attribute.
         This is a limitation of the source code.
         """
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         # Duplicate column names cause issues - df[column] returns DataFrame
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -206,7 +206,7 @@ class TestToXY:
         The source code has `ValueError` without `raise`, so no exception is raised.
         The function proceeds and produces output using the mismatched labels.
         """
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         # Both index and columns are non-numeric but different
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -223,7 +223,7 @@ class TestToXY:
     @pytest.mark.parametrize("dtype", [int, float, np.float32, np.float64])
     def test_different_dtypes(self, dtype):
         """Test conversion with different data types."""
-        from scitex.pd import to_xy
+        from scitex_pd import to_xy
 
         data = np.array([[1, 2], [3, 4]], dtype=dtype)
         df = pd.DataFrame(data, index=["A", "B"], columns=["A", "B"])

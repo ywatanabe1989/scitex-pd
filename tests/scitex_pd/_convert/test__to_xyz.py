@@ -38,13 +38,13 @@ class TestToXYZ:
 
     def test_import(self):
         """Test that to_xyz can be imported."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         assert callable(to_xyz)
 
     def test_basic_conversion(self, rectangular_df):
         """Test basic conversion of rectangular DataFrame."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         result = to_xyz(rectangular_df)
 
@@ -71,7 +71,7 @@ class TestToXYZ:
 
     def test_named_axes(self, named_axes_df):
         """Test conversion with named index and columns."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         result = to_xyz(named_axes_df)
 
@@ -94,7 +94,7 @@ class TestToXYZ:
 
     def test_numeric_indices(self, numeric_df):
         """Test conversion with numeric index and columns."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         result = to_xyz(numeric_df)
 
@@ -111,7 +111,7 @@ class TestToXYZ:
 
     def test_single_column_dataframe(self):
         """Test conversion of single column DataFrame."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         df = pd.DataFrame({"A": [1, 2, 3]}, index=["x1", "x2", "x3"])
         result = to_xyz(df)
@@ -123,7 +123,7 @@ class TestToXYZ:
 
     def test_single_row_dataframe(self):
         """Test conversion of single row DataFrame."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         df = pd.DataFrame([[1, 2, 3]], columns=["A", "B", "C"], index=["row1"])
         result = to_xyz(df)
@@ -135,7 +135,7 @@ class TestToXYZ:
 
     def test_with_nan_values(self):
         """Test handling of NaN values."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         df = pd.DataFrame(
             {"A": [1, np.nan, 3], "B": [np.nan, 5, 6], "C": [7, 8, np.nan]},
@@ -155,7 +155,7 @@ class TestToXYZ:
         Empty DataFrames with no columns cause pd.concat to fail with
         'No objects to concatenate'. This is expected behavior.
         """
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         # Empty DataFrame with no columns raises ValueError
         df = pd.DataFrame()
@@ -170,7 +170,7 @@ class TestToXYZ:
 
     def test_column_order(self, rectangular_df):
         """Test that columns are processed in order."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         result = to_xyz(rectangular_df)
 
@@ -180,7 +180,7 @@ class TestToXYZ:
 
     def test_index_preservation(self):
         """Test that index values are preserved correctly."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         # Create DataFrame with string index
         df = pd.DataFrame(
@@ -195,7 +195,7 @@ class TestToXYZ:
 
     def test_mixed_types(self):
         """Test conversion with mixed data types."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         df = pd.DataFrame(
             {
@@ -222,7 +222,7 @@ class TestToXYZ:
         For MultiIndex, index.name is None (level names are in index.names),
         so the x column is named 'x'. The MultiIndex values become tuples.
         """
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         # Create DataFrame with MultiIndex
         arrays = [["A", "A", "B", "B"], [1, 2, 1, 2]]
@@ -239,7 +239,7 @@ class TestToXYZ:
 
     def test_datetime_index(self):
         """Test conversion with datetime index."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         dates = pd.date_range("2021-01-01", periods=3)
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]}, index=dates)
@@ -253,7 +253,7 @@ class TestToXYZ:
     @pytest.mark.parametrize("nrows,ncols", [(1, 10), (10, 1), (5, 5), (3, 7)])
     def test_various_shapes(self, nrows, ncols):
         """Test conversion with various DataFrame shapes."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         data = np.arange(nrows * ncols).reshape(nrows, ncols)
         df = pd.DataFrame(data)
@@ -264,7 +264,7 @@ class TestToXYZ:
 
     def test_no_square_requirement(self):
         """Test that to_xyz doesn't require square DataFrame (unlike to_xy)."""
-        from scitex.pd import to_xyz
+        from scitex_pd import to_xyz
 
         # Non-square DataFrame should work fine
         df = pd.DataFrame(np.arange(12).reshape(3, 4))

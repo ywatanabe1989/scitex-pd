@@ -15,7 +15,7 @@ class TestForceDfBasic:
 
     def test_dict_to_dataframe(self):
         """Test converting dictionary to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": [1, 2, 3], "b": [4, 5, 6]}
         result = force_df(data)
@@ -28,7 +28,7 @@ class TestForceDfBasic:
 
     def test_dataframe_passthrough(self):
         """Test that DataFrame is returned unchanged."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
         result = force_df(df)
@@ -38,7 +38,7 @@ class TestForceDfBasic:
 
     def test_series_to_dataframe(self):
         """Test converting Series to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         series = pd.Series([1, 2, 3], name="data")
         result = force_df(series)
@@ -50,7 +50,7 @@ class TestForceDfBasic:
 
     def test_list_to_dataframe(self):
         """Test converting list to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = [1, 2, 3, 4, 5]
         result = force_df(data)
@@ -62,7 +62,7 @@ class TestForceDfBasic:
 
     def test_tuple_to_dataframe(self):
         """Test converting tuple to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = (10, 20, 30)
         result = force_df(data)
@@ -78,7 +78,7 @@ class TestForceDfNumPy:
 
     def test_1d_array_to_dataframe(self):
         """Test converting 1D numpy array to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         arr = np.array([1, 2, 3, 4])
         result = force_df(arr)
@@ -90,7 +90,7 @@ class TestForceDfNumPy:
 
     def test_2d_array_to_dataframe(self):
         """Test converting 2D numpy array to DataFrame."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         arr = np.array([[1, 2, 3], [4, 5, 6]])
         result = force_df(arr)
@@ -104,7 +104,7 @@ class TestForceDfNumPy:
 
     def test_empty_array(self):
         """Test with empty numpy array."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         arr = np.array([])
         result = force_df(arr)
@@ -118,7 +118,7 @@ class TestForceDfMixedLengths:
 
     def test_dict_mixed_lengths_default_filler(self):
         """Test dictionary with mixed-length values using default filler."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": [1, 2, 3], "b": [4, 5], "c": [6]}
         result = force_df(data)
@@ -137,7 +137,7 @@ class TestForceDfMixedLengths:
 
     def test_dict_mixed_lengths_custom_filler(self):
         """Test dictionary with mixed-length values using custom filler."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": [1, 2, 3], "b": [4, 5], "c": [6]}
         result = force_df(data, filler=0)
@@ -148,7 +148,7 @@ class TestForceDfMixedLengths:
 
     def test_scalar_values_in_dict(self):
         """Test dictionary with scalar values."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": 1, "b": [2, 3, 4], "c": "hello"}
         result = force_df(data)
@@ -167,7 +167,7 @@ class TestForceDfListedSeries:
 
     def test_list_of_series(self):
         """Test that list of Series is handled (though not ideally)."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         series1 = pd.Series({"a": 1, "b": 2})
         series2 = pd.Series({"a": 3, "b": 4})
@@ -185,7 +185,7 @@ class TestForceDfListedSeries:
 
     def test_list_of_series_workaround(self):
         """Test workaround for list of Series."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         series1 = pd.Series({"a": 1, "b": 2})
         series2 = pd.Series({"a": 3, "b": 4})
@@ -207,7 +207,7 @@ class TestForceDfEdgeCases:
 
     def test_empty_dict(self):
         """Test with empty dictionary."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         result = force_df({})
 
@@ -216,7 +216,7 @@ class TestForceDfEdgeCases:
 
     def test_nested_structures(self):
         """Test with nested structures."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": [1, 2], "b": [[3, 4], [5, 6]]}
         result = force_df(data)
@@ -228,7 +228,7 @@ class TestForceDfEdgeCases:
 
     def test_mixed_types(self):
         """Test with mixed data types."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {
             "int": [1, 2, 3],
@@ -250,7 +250,7 @@ class TestForceDfEdgeCases:
 
     def test_single_value_dict(self):
         """Test with single-value dictionary."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": 42}
         result = force_df(data)
@@ -264,7 +264,7 @@ class TestForceDfSpecialCases:
 
     def test_series_without_name(self):
         """Test Series without name."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         series = pd.Series([1, 2, 3])
         result = force_df(series)
@@ -275,7 +275,7 @@ class TestForceDfSpecialCases:
 
     def test_dict_with_none_values(self):
         """Test dictionary with None values."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {"a": None, "b": [1, 2, 3]}
         result = force_df(data)
@@ -289,7 +289,7 @@ class TestForceDfSpecialCases:
 
     def test_dict_with_string_keys(self):
         """Test dictionary with various string keys."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         data = {
             "column_1": [1, 2],
@@ -305,7 +305,7 @@ class TestForceDfSpecialCases:
 
     def test_custom_filler_types(self):
         """Test various custom filler types."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         # Test with string filler
         data = {"a": [1], "b": [2, 3]}
@@ -330,7 +330,7 @@ class TestForceDfIntegration:
 
     def test_real_world_scenario(self):
         """Test with realistic data scenario."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         # Simulating data from different sources with varying lengths
         data = {
@@ -350,7 +350,7 @@ class TestForceDfIntegration:
 
     def test_chained_operations(self):
         """Test force_df in chained operations."""
-        from scitex.pd import force_df
+        from scitex_pd import force_df
 
         # Start with mixed data
         data = {"a": [1, 2], "b": [3, 4, 5]}

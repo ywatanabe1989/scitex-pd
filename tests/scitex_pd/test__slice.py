@@ -16,7 +16,7 @@ class TestSliceBasic:
 
     def test_slice_by_indices(self):
         """Test slicing DataFrame by row indices using slice object."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
 
@@ -29,7 +29,7 @@ class TestSliceBasic:
 
     def test_slice_from_start(self):
         """Test slicing from start of DataFrame."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [10, 20, 30, 40], "B": [100, 200, 300, 400]})
 
@@ -41,7 +41,7 @@ class TestSliceBasic:
 
     def test_slice_to_end(self):
         """Test slicing to end of DataFrame."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
 
@@ -53,7 +53,7 @@ class TestSliceBasic:
 
     def test_slice_with_step(self):
         """Test slicing with step parameter."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": list(range(10)), "B": list(range(10, 20))})
 
@@ -69,7 +69,7 @@ class TestSliceByConditions:
 
     def test_single_condition(self):
         """Test slicing with single condition."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 2, 1], "B": ["x", "y", "z", "y", "x"]})
 
@@ -82,7 +82,7 @@ class TestSliceByConditions:
 
     def test_multiple_conditions(self):
         """Test slicing with multiple conditions."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {
@@ -101,7 +101,7 @@ class TestSliceByConditions:
 
     def test_list_condition(self):
         """Test slicing with list values in conditions."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
 
@@ -117,7 +117,7 @@ class TestColumnSlicing:
 
     def test_select_single_column(self):
         """Test selecting single column."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
 
@@ -128,7 +128,7 @@ class TestColumnSlicing:
 
     def test_select_multiple_columns(self):
         """Test selecting multiple columns."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2], "B": [3, 4], "C": [5, 6], "D": [7, 8]})
 
@@ -139,7 +139,7 @@ class TestColumnSlicing:
 
     def test_reorder_columns(self):
         """Test that column order follows the specified list."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2], "B": [3, 4], "C": [5, 6]})
 
@@ -153,7 +153,7 @@ class TestCombinedSlicing:
 
     def test_slice_rows_and_columns(self):
         """Test slicing both rows and columns."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {
@@ -173,7 +173,7 @@ class TestCombinedSlicing:
 
     def test_conditions_and_columns(self):
         """Test using conditions and column selection together."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {
@@ -196,7 +196,7 @@ class TestEdgeCases:
 
     def test_empty_dataframe(self):
         """Test slicing empty DataFrame."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame()
         result = slice(df, builtins.slice(0, 10))
@@ -206,7 +206,7 @@ class TestEdgeCases:
 
     def test_no_conditions(self):
         """Test with no slicing conditions."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
         result = slice(df)
@@ -215,7 +215,7 @@ class TestEdgeCases:
 
     def test_no_matching_conditions(self):
         """Test when conditions match no rows."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
 
@@ -226,7 +226,7 @@ class TestEdgeCases:
 
     def test_out_of_bounds_slice(self):
         """Test slice indices beyond DataFrame bounds."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3]})
 
@@ -239,7 +239,7 @@ class TestEdgeCases:
 
     def test_negative_slice_indices(self):
         """Test negative indices in slice."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
 
@@ -255,7 +255,7 @@ class TestDataTypes:
 
     def test_mixed_dtypes(self):
         """Test slicing DataFrame with mixed data types."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {
@@ -276,7 +276,7 @@ class TestDataTypes:
 
     def test_nan_values(self):
         """Test slicing with NaN values."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {"A": [1, np.nan, 3, np.nan, 5], "B": ["a", "b", np.nan, "d", "e"]}
@@ -296,7 +296,7 @@ class TestIndexPreservation:
 
     def test_custom_index_preservation(self):
         """Test that custom index is preserved."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3, 4]}, index=["w", "x", "y", "z"])
 
@@ -308,7 +308,7 @@ class TestIndexPreservation:
 
     def test_multiindex(self):
         """Test slicing with MultiIndex."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         arrays = [["A", "A", "B", "B"], [1, 2, 1, 2]]
         index = pd.MultiIndex.from_arrays(arrays)
@@ -325,7 +325,7 @@ class TestRealWorldScenarios:
 
     def test_data_filtering_workflow(self):
         """Test typical data filtering workflow."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         # Sample sales data
         df = pd.DataFrame(
@@ -347,7 +347,7 @@ class TestRealWorldScenarios:
 
     def test_time_series_window(self):
         """Test extracting time series window."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame(
             {
@@ -369,7 +369,7 @@ class TestDocstringExamples:
 
     def test_docstring_slice_example(self):
         """Test slice example from docstring."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
 
@@ -381,7 +381,7 @@ class TestDocstringExamples:
 
     def test_docstring_conditions_example(self):
         """Test conditions example from docstring."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
 
@@ -393,7 +393,7 @@ class TestDocstringExamples:
 
     def test_docstring_columns_example(self):
         """Test columns example from docstring."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
 
@@ -408,7 +408,7 @@ class TestCopyBehavior:
 
     def test_returns_copy(self):
         """Test that modifications to result don't affect original."""
-        from scitex.pd import slice
+        from scitex_pd import slice
 
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
 

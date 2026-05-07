@@ -33,13 +33,13 @@ class TestSort:
 
     def test_import(self):
         """Test that sort can be imported."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         assert callable(sort)
 
     def test_basic_sort_by_column(self, sample_df):
         """Test basic sorting by a single column."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         # Sort by column B
         result = sort(sample_df, by="B")
@@ -48,7 +48,7 @@ class TestSort:
 
     def test_sort_descending(self, sample_df):
         """Test sorting in descending order."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         result = sort(sample_df, by="B", ascending=False)
         assert list(result["B"]) == [4, 3, 2, 1]
@@ -56,7 +56,7 @@ class TestSort:
 
     def test_sort_multiple_columns(self):
         """Test sorting by multiple columns."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame({"A": [1, 1, 2, 2], "B": [4, 3, 2, 1]})
 
@@ -65,7 +65,7 @@ class TestSort:
 
     def test_sort_with_mixed_ascending(self):
         """Test sorting with mixed ascending/descending orders."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame({"A": [1, 1, 2, 2], "B": [3, 4, 1, 2]})
 
@@ -74,7 +74,7 @@ class TestSort:
 
     def test_sort_with_na_position(self, df_with_nulls):
         """Test sorting with NaN position control."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         # NaN last (default)
         result = sort(df_with_nulls, by="B", na_position="last")
@@ -86,7 +86,7 @@ class TestSort:
 
     def test_sort_ignore_index(self, sample_df):
         """Test sorting with index reset."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         # First, set a custom index
         sample_df.index = [10, 20, 30, 40]
@@ -101,7 +101,7 @@ class TestSort:
 
     def test_sort_with_custom_orders(self):
         """Test sorting with custom category orders."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame(
             {"A": ["small", "medium", "large", "small", "large"], "B": [1, 2, 3, 4, 5]}
@@ -116,7 +116,7 @@ class TestSort:
 
     def test_sort_with_multiple_custom_orders(self):
         """Test sorting with custom orders for multiple columns."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame(
             {
@@ -134,7 +134,7 @@ class TestSort:
 
     def test_sort_inplace(self, sample_df):
         """Test in-place sorting - returns same object but update doesn't reorder rows."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         original_id = id(sample_df)
         result = sort(sample_df, by="B", inplace=True)
@@ -147,7 +147,7 @@ class TestSort:
 
     def test_column_reordering(self, sample_df):
         """Test that sorted columns are moved to the front."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         result = sort(sample_df, by="B")
         assert list(result.columns) == ["B", "A", "C"]
@@ -158,7 +158,7 @@ class TestSort:
 
     def test_sort_with_key_function(self):
         """Test sorting with a key function."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame(
             {"A": ["apple", "Banana", "cherry", "Date"], "B": [1, 2, 3, 4]}
@@ -170,7 +170,7 @@ class TestSort:
 
     def test_different_sort_algorithms(self, sample_df):
         """Test different sorting algorithms."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         for algorithm in ["quicksort", "mergesort", "heapsort", "stable"]:
             result = sort(sample_df, by="B", kind=algorithm)
@@ -178,7 +178,7 @@ class TestSort:
 
     def test_empty_dataframe(self):
         """Test sorting an empty DataFrame with columns."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         # Empty DataFrame without columns cannot be sorted (no `by` parameter)
         # Empty with columns can be sorted
@@ -189,7 +189,7 @@ class TestSort:
 
     def test_single_row_dataframe(self):
         """Test sorting a single-row DataFrame."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame({"A": [1], "B": [2]})
         result = sort(df, by="A")
@@ -197,7 +197,7 @@ class TestSort:
 
     def test_sort_no_by_parameter(self, sample_df):
         """Test sorting without specifying 'by' parameter."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         # Should use all columns when orders is provided
         orders = {"A": ["bar", "baz", "foo", "qux"]}
@@ -206,7 +206,7 @@ class TestSort:
 
     def test_error_handling(self):
         """Test error handling for invalid inputs."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         df = pd.DataFrame({"A": [1, 2, 3]})
 
@@ -224,7 +224,7 @@ class TestSort:
     )
     def test_invalid_input_types(self, input_type, expected_error):
         """Test that invalid input types raise appropriate errors."""
-        from scitex.pd import sort
+        from scitex_pd import sort
 
         with pytest.raises(expected_error):
             sort(input_type, by="A")
