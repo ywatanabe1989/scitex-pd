@@ -14,7 +14,7 @@ import pytest
 # Add the project root to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../src"))
 
-from scitex.pd import replace
+from scitex_pd import replace
 
 
 class TestBasicReplacements:
