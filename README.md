@@ -9,7 +9,7 @@
 <p align="center"><b>Pandas helpers — coerce, reshape, find p-values, merge/melt columns, sort/slice/round.</b></p>
 
 <p align="center">
-  <a href="https://scitex-pd.readthedocs.io/">Full Documentation</a> · <code>pip install scitex-pd</code>
+  <a href="https://scitex-pd.readthedocs.io/">Full Documentation</a> · <code>uv pip install scitex-pd[all]</code>
 </p>
 
 <!-- scitex-badges:start -->
