@@ -435,6 +435,24 @@ class TestRound:
         pd.testing.assert_frame_equal(result, expected)
 
 
+
+class TestRoundFallback:
+    """Defensive ValueError/TypeError fallback inside `custom_round`."""
+
+    def test_nullable_bool_with_na_returns_column_unchanged(self):
+        from scitex_pd import round as pd_round
+
+        # `astype(int)` on a nullable-boolean Series containing pd.NA
+        # raises IntCastingNaNError (a ValueError subclass), exercising
+        # the except branch.
+        col = pd.Series([True, False, pd.NA], dtype="boolean")
+        df = pd.DataFrame({"A": col})
+        out = pd_round(df)
+        assert out["A"].dtype == col.dtype
+        assert out["A"].iloc[0] == True  # noqa: E712
+        assert pd.isna(out["A"].iloc[2])
+
+
 if __name__ == "__main__":
     import os
 

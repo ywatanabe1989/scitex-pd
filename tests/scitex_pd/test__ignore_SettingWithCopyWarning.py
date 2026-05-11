@@ -30,12 +30,20 @@ def _settingwithcopywarning_available() -> bool:
         return False
 
 
-pytestmark = pytest.mark.skipif(
+# The warning-suppression *behaviour* (lines 30-32 of the source) only
+# fires when pandas still exposes SettingWithCopyWarning (pandas <2.2).
+# On newer pandas the class is gone and the contextmanager degrades to
+# a pure no-op. Tests that assert real suppression are class-marked
+# with this skip; unconditional tests (no-op contract, alias identity,
+# injected-class path) live in `TestIgnoreSettingWithCopyWarningUniversal`
+# below and run on every pandas version.
+_skip_without_swcw = pytest.mark.skipif(
     not _settingwithcopywarning_available(),
     reason="pandas >=2.2 removed SettingWithCopyWarning; nothing to suppress.",
 )
 
 
+@_skip_without_swcw
 class TestIgnoreSettingWithCopyWarningBasic:
     """Test basic functionality of ignore_setting_with_copy_warning."""
 
@@ -98,6 +106,7 @@ class TestIgnoreSettingWithCopyWarningBasic:
             assert len(setting_warnings) == 0
 
 
+@_skip_without_swcw
 class TestBackwardCompatibility:
     """Test backward compatibility with old function name."""
 
@@ -131,6 +140,7 @@ class TestBackwardCompatibility:
         assert ignore_setting_with_copy_warning is ignore_SettingWithCopyWarning
 
 
+@_skip_without_swcw
 class TestComplexScenarios:
     """Test complex DataFrame manipulation scenarios."""
 
@@ -196,6 +206,7 @@ class TestComplexScenarios:
             assert len(setting_warnings) == 0
 
 
+@_skip_without_swcw
 class TestWarningRestoration:
     """Test that warning settings are properly restored."""
 
@@ -239,6 +250,7 @@ class TestWarningRestoration:
             assert len(w) == 1
 
 
+@_skip_without_swcw
 class TestEdgeCases:
     """Test edge cases and special scenarios."""
 
@@ -298,6 +310,7 @@ class TestEdgeCases:
             assert len(setting_warnings) == 0
 
 
+@_skip_without_swcw
 class TestRealWorldUsage:
     """Test real-world usage patterns."""
 
@@ -360,6 +373,7 @@ class TestRealWorldUsage:
             assert len(setting_warnings) == 0
 
 
+@_skip_without_swcw
 class TestDocstringExample:
     """Test the example from the docstring."""
 
@@ -383,6 +397,54 @@ class TestDocstringExample:
                 warning for warning in w if "SettingWithCopy" in str(warning.category)
             ]
             assert len(setting_warnings) == 0
+
+
+
+class TestIgnoreSettingWithCopyWarningUniversal:
+    """Run on every pandas version. Covers the no-op path (pandas >=2.2)
+    AND, via a temporary attribute injection, the simplefilter path that
+    is otherwise unreachable on modern pandas."""
+
+    def test_context_manager_yields_cleanly(self):
+        from scitex_pd import ignore_setting_with_copy_warning
+
+        with ignore_setting_with_copy_warning():
+            x = 1 + 1
+        assert x == 2
+
+    def test_alias_is_same_callable(self):
+        from scitex_pd import (
+            ignore_setting_with_copy_warning,
+            ignore_SettingWithCopyWarning,
+        )
+
+        assert ignore_SettingWithCopyWarning is ignore_setting_with_copy_warning
+
+    def test_simplefilter_path_when_warning_class_present(self):
+        import pandas.errors
+
+        from scitex_pd import ignore_setting_with_copy_warning
+
+        had_attr = hasattr(pandas.errors, "SettingWithCopyWarning")
+        original = getattr(pandas.errors, "SettingWithCopyWarning", None)
+
+        class _FakeSWCW(Warning):
+            pass
+
+        pandas.errors.SettingWithCopyWarning = _FakeSWCW
+        try:
+            with warnings.catch_warnings(record=True) as captured:
+                warnings.simplefilter("always")
+                with ignore_setting_with_copy_warning():
+                    warnings.warn("ignored", _FakeSWCW)
+                assert not any(
+                    isinstance(rec.message, _FakeSWCW) for rec in captured
+                )
+        finally:
+            if had_attr:
+                pandas.errors.SettingWithCopyWarning = original
+            else:
+                delattr(pandas.errors, "SettingWithCopyWarning")
 
 
 if __name__ == "__main__":

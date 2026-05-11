@@ -89,12 +89,14 @@ if __name__ == "__main__":
     print("✓ Test 3 passed: Default returned for missing column")
 
     # Test case 4: Raise on multiple
+    raised = False
     try:
         get_unique(df2, "patient_id", raise_on_multiple=True)
-        assert False, "Should have raised ValueError"
     except ValueError as e:
+        raised = True
         assert "has 2 unique values" in str(e)
-        print("✓ Test 4 passed: ValueError raised for multiple values")
+    assert raised, "Should have raised ValueError"
+    print("✓ Test 4 passed: ValueError raised for multiple values")
 
     print("\nAll tests passed!")
 

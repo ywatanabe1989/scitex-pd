@@ -115,11 +115,8 @@ def find_indi(
                 condition = df[key] == value
         condition_series.append(condition)
 
-    if condition_series:
-        mask = pd.concat(condition_series, axis=1).all(axis=1)
-        return df.index[mask].tolist()
-    else:
-        return []
+    mask = pd.concat(condition_series, axis=1).all(axis=1)
+    return df.index[mask].tolist()
 
 
 # EOF

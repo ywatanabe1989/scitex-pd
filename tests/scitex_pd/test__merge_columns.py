@@ -392,6 +392,19 @@ class TestPerformance:
         assert "X_Y" in result.columns
 
 
+
+class TestMergeColumnsEmpty:
+    """Empty-DataFrame branch with a custom column name."""
+
+    def test_empty_df_with_sep_none_uses_name(self):
+        from scitex_pd import merge_columns
+
+        df = pd.DataFrame({"a": [], "b": []})
+        out = merge_columns(df, ["a", "b"], sep=None, name="custom")
+        assert "custom" in out.columns
+        assert len(out) == 0
+
+
 if __name__ == "__main__":
     import os
 

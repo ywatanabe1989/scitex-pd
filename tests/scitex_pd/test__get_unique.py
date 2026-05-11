@@ -54,6 +54,20 @@ class TestMissingColumn:
             get_unique(df, "missing", raise_on_multiple=True)
 
 
+
+import runpy
+
+
+class TestGetUniqueMainBlock:
+    """Run the module-level `__main__` self-check via runpy so the demo
+    block contributes real coverage instead of dead-on-import code."""
+
+    def test_main_block(self, capsys):
+        runpy.run_module("scitex_pd._get_unique", run_name="__main__")
+        captured = capsys.readouterr()
+        assert "All tests passed" in captured.out
+
+
 if __name__ == "__main__":
     import os
 

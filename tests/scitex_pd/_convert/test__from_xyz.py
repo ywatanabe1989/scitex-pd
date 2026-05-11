@@ -389,6 +389,19 @@ class TestLargeDatasets:
         assert (result != 0).all().all()
 
 
+
+import runpy
+
+
+class TestFromXyzMainBlock:
+    """Run the module-level `__main__` demo via runpy."""
+
+    def test_main_block(self, capsys):
+        runpy.run_module("scitex_pd._convert._from_xyz", run_name="__main__")
+        captured = capsys.readouterr()
+        assert captured.out
+
+
 if __name__ == "__main__":
     import os
 

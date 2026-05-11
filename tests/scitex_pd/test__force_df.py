@@ -363,6 +363,67 @@ class TestForceDfIntegration:
         assert result["sum"].tolist() == [4, 6, 5]
 
 
+
+import numpy as np  # noqa: F401  (already imported above; re-imported intentionally for clarity)
+
+
+class TestForceDfBranchCoverage:
+    """Branches not exercised by the main behaviour suite above."""
+
+    def test_none_input_returns_empty_dataframe(self):
+        from scitex_pd import force_df
+
+        result = force_df(None)
+        assert isinstance(result, pd.DataFrame)
+        assert result.empty
+
+    def test_3d_ndarray_is_reshaped(self):
+        from scitex_pd import force_df
+
+        arr = np.arange(24).reshape(2, 3, 4)
+        result = force_df(arr)
+        assert isinstance(result, pd.DataFrame)
+        assert result.shape == (2, 12)
+
+    def test_bool_scalar(self):
+        from scitex_pd import force_df
+
+        result = force_df(True)
+        assert result.shape == (1, 1)
+        val = result["value"].iloc[0]
+        assert val is True or val == 1
+
+    def test_str_scalar(self):
+        from scitex_pd import force_df
+
+        result = force_df("hello")
+        assert result.shape == (1, 1)
+        assert result["value"].iloc[0] == "hello"
+
+    def test_list_of_lists(self):
+        from scitex_pd import force_df
+
+        result = force_df([[1, 2], [3, 4]])
+        assert result.shape == (2, 2)
+        assert result.iloc[0].tolist() == [1, 2]
+
+    def test_set_falls_through_to_generic_iterable(self):
+        from scitex_pd import force_df
+
+        result = force_df({1, 2, 3})
+        assert result.shape == (3, 1)
+        assert set(result["value"].tolist()) == {1, 2, 3}
+
+    def test_unconvertible_object_raises_type_error(self):
+        from scitex_pd import force_df
+
+        class NotIterable:
+            pass
+
+        with pytest.raises(TypeError, match="Cannot convert object"):
+            force_df(NotIterable())
+
+
 if __name__ == "__main__":
     import os
 

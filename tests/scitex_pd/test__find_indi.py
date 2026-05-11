@@ -338,6 +338,36 @@ class TestFindIndiDocumentationExamples:
         assert result == [0]
 
 
+
+class TestFindIndiNaPaths:
+    """NaN-in-list paths + TypeError fallback inside the list branch."""
+
+    def test_pd_na_in_list_treated_as_na_match(self):
+        from scitex_pd import find_indi
+
+        df = pd.DataFrame({"A": pd.array([1, 2, pd.NA], dtype="Int64")})
+        idx = find_indi(df, {"A": [1, pd.NA]})
+        assert idx == [0, 2]
+
+    def test_typeerror_fallback_with_unhashable_eq(self):
+        from scitex_pd import find_indi
+
+        # An object whose __eq__ raises forces `None in value` to
+        # propagate TypeError, exercising the except branch. The
+        # fallback skips strings via `isinstance(v, str)` so surrounding
+        # strings are safely ignored.
+        class BadEq:
+            def __eq__(self, other):
+                raise TypeError("boom")
+
+            def __hash__(self):
+                return id(self)
+
+        df = pd.DataFrame({"A": ["x", "y", "z"]})
+        idx = find_indi(df, {"A": ["x", BadEq()]})
+        assert idx == [0]
+
+
 if __name__ == "__main__":
     import os
 
