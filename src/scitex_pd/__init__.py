@@ -1,5 +1,42 @@
 #!/usr/bin/env python3
-"""scitex-pd — pandas helpers (force_df, melt_cols, find_pval, mv, etc) — standalone."""
+"""scitex-pd — pandas helpers extracted from the SciTeX ecosystem.
+
+Functionalities
+---------------
+- `force_df(x)` — coerce dict / Series / list / scalar / ndarray
+  into a `pandas.DataFrame` with sensible defaults.
+- `from_xyz(df, x, y, z)` / `to_xy(df)` / `to_xyz(df)` — long ↔ wide
+  pivots; `to_numeric(df)` — column-wise numeric coercion.
+- `find_pval(df)` / `_find_pval_col` — locate p-value columns by name.
+- `find_indi(df, mask)` / `get_unique(df, col)` — boolean-mask and
+  unique-values inspection helpers.
+- `merge_columns` / `merge_cols`, `melt_cols`, `mv` /
+  `mv_to_first` / `mv_to_last` — column combine / reshape / reorder.
+- `replace(df, mapping)`, `round(df, ndigits)`, `slice(df, ...)`,
+  `sort(df, ...)` — uniform DataFrame-in / DataFrame-out transforms.
+- `ignore_setting_with_copy_warning()` — context-manager for the
+  pandas SettingWithCopyWarning.
+
+IO
+--
+- Reads: `pandas.DataFrame`, `pandas.Series`, `numpy.ndarray`, dict,
+  list, scalar inputs.
+- Writes: nothing — all functions return new pandas objects; original
+  inputs are not mutated.
+
+Dependencies
+------------
+- Hard: `pandas`, `numpy`, `scitex-types` (for `is_listed_X`).
+
+Standalone import::
+
+    import scitex_pd as pd_
+    df = pd_.force_df(data)
+    pvals = pd_.find_pval(df)
+
+The umbrella `scitex.pd` import path is preserved via a
+`sys.modules`-alias bridge in `scitex-python`.
+"""
 
 from __future__ import annotations
 
