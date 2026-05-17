@@ -17,8 +17,6 @@ canonical-location: scitex-pd/src/scitex_pd/_skills/scitex-pd/SKILL.md
 ---
 
 
-> **Interfaces:** Python ⭐⭐⭐ (primary) · CLI — · MCP — · Skills ⭐⭐ · Hook — · HTTP —
-
 # scitex-pd
 
 Conventional pandas helpers — replaces the boilerplate that everyone
