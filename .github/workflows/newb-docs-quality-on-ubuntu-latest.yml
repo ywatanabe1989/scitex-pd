@@ -1,4 +1,4 @@
-name: Newb
+name: newb
 
 # Doc-quality verification — fresh Claude agent reads only the package's
 # docs in a hard-isolated container, then tries to install + import +
@@ -44,7 +44,13 @@ jobs:
 
       - name: Run newb (verbose so the log shows per-prompt timing)
         env:
-          NEWB_CLAUDE_CODE_CREDENTIALS_JSON: ${{ secrets.NEWB_CLAUDE_CODE_CREDENTIALS_JSON }}
+          # newb's own secret — the `NEWB_` prefix is owned by the newb
+          # distribution; PS-168 (narrowed) accepts cross-package
+          # prefixes from any ECOSYSTEM entry, so this needs no extra
+          # SCITEX_DEV_-prefix wrapper. Double-prefixing
+          # (SCITEX_DEV_NEWB_*) was tried briefly and reverted per the
+          # operator: stacking two prefixes obscures the meaning.
+          NEWB_ANTHROPIC_API_KEY: ${{ secrets.NEWB_ANTHROPIC_API_KEY }}
           # Resource caps so an attacker who hijacked the docs-reading
           # agent can't DoS via memory/pid exhaustion. Generous enough
           # for pip wheel-building (~1-2 GB transient peak).
@@ -52,8 +58,8 @@ jobs:
           NEWB_HARDEN_PIDS_LIMIT: 512
           NEWB_HARDEN_CPUS: "2"
         run: |
-          if [ -z "${NEWB_CLAUDE_CODE_CREDENTIALS_JSON}" ]; then
-            echo "::error::secrets.NEWB_CLAUDE_CODE_CREDENTIALS_JSON is not set on this repo." >&2
+          if [ -z "${NEWB_ANTHROPIC_API_KEY}" ]; then
+            echo "::error::secrets.NEWB_ANTHROPIC_API_KEY is not set on this repo." >&2
             exit 1
           fi
           newb . --json -vv > newb-report.json
