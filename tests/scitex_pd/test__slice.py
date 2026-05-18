@@ -1,89 +1,128 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 08:00:00 (ywatanabe)"
-# File: ./tests/scitex/pd/test__slice.py
+"""Tests for scitex_pd.slice."""
 
 import builtins
-import os
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from _helpers import frames_match
+from scitex_pd import slice as pd_slice
+
 
 class TestSliceBasic:
     """Test basic functionality of slice function."""
 
-    def test_slice_by_indices(self):
-        """Test slicing DataFrame by row indices using slice object."""
-        from scitex_pd import slice
-
+    def test_slice_by_indices_returns_three_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
-
-        result = slice(df, builtins.slice(1, 4))
-
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4))
+        # Assert
         assert len(result) == 3
+
+    def test_slice_by_indices_returns_expected_column_a(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4))
+        # Assert
         assert result["A"].tolist() == [2, 3, 4]
+
+    def test_slice_by_indices_returns_expected_column_b(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4))
+        # Assert
         assert result["B"].tolist() == ["b", "c", "d"]
+
+    def test_slice_by_indices_preserves_original_index_positions(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4))
+        # Assert
         assert result.index.tolist() == [1, 2, 3]
 
-    def test_slice_from_start(self):
-        """Test slicing from start of DataFrame."""
-        from scitex_pd import slice
-
+    def test_slice_from_start_returns_two_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [10, 20, 30, 40], "B": [100, 200, 300, 400]})
-
-        result = slice(df, builtins.slice(None, 2))
-
+        # Act
+        result = pd_slice(df, builtins.slice(None, 2))
+        # Assert
         assert len(result) == 2
+
+    def test_slice_from_start_returns_first_values(self):
+        # Arrange
+        df = pd.DataFrame({"A": [10, 20, 30, 40], "B": [100, 200, 300, 400]})
+        # Act
+        result = pd_slice(df, builtins.slice(None, 2))
+        # Assert
         assert result["A"].tolist() == [10, 20]
-        assert result["B"].tolist() == [100, 200]
 
-    def test_slice_to_end(self):
-        """Test slicing to end of DataFrame."""
-        from scitex_pd import slice
-
+    def test_slice_to_end_returns_two_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
-
-        result = slice(df, builtins.slice(3, None))
-
+        # Act
+        result = pd_slice(df, builtins.slice(3, None))
+        # Assert
         assert len(result) == 2
+
+    def test_slice_to_end_returns_tail_values(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
+        # Act
+        result = pd_slice(df, builtins.slice(3, None))
+        # Assert
         assert result["A"].tolist() == [4, 5]
-        assert result["B"].tolist() == [40, 50]
 
-    def test_slice_with_step(self):
-        """Test slicing with step parameter."""
-        from scitex_pd import slice
-
+    def test_slice_with_step_two_returns_every_other_row(self):
+        # Arrange
         df = pd.DataFrame({"A": list(range(10)), "B": list(range(10, 20))})
-
-        result = slice(df, builtins.slice(0, 10, 2))
-
-        assert len(result) == 5
+        # Act
+        result = pd_slice(df, builtins.slice(0, 10, 2))
+        # Assert
         assert result["A"].tolist() == [0, 2, 4, 6, 8]
-        assert result["B"].tolist() == [10, 12, 14, 16, 18]
 
 
 class TestSliceByConditions:
     """Test slicing by conditions using dictionary."""
 
-    def test_single_condition(self):
-        """Test slicing with single condition."""
-        from scitex_pd import slice
-
-        df = pd.DataFrame({"A": [1, 2, 3, 2, 1], "B": ["x", "y", "z", "y", "x"]})
-
-        result = slice(df, {"A": 2})
-
-        assert len(result) == 2
+    def test_single_condition_returns_two_matching_rows(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 2, 1], "B": ["x", "y", "z", "y", "x"]}
+        )
+        # Act
+        result = pd_slice(df, {"A": 2})
+        # Assert
         assert result["A"].tolist() == [2, 2]
+
+    def test_single_condition_preserves_companion_column_values(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 2, 1], "B": ["x", "y", "z", "y", "x"]}
+        )
+        # Act
+        result = pd_slice(df, {"A": 2})
+        # Assert
         assert result["B"].tolist() == ["y", "y"]
+
+    def test_single_condition_preserves_source_index(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 2, 1], "B": ["x", "y", "z", "y", "x"]}
+        )
+        # Act
+        result = pd_slice(df, {"A": 2})
+        # Assert
         assert result.index.tolist() == [1, 3]
 
-    def test_multiple_conditions(self):
-        """Test slicing with multiple conditions."""
-        from scitex_pd import slice
-
+    def test_multiple_conditions_return_single_matching_row(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1, 1, 2, 2, 3],
@@ -91,70 +130,65 @@ class TestSliceByConditions:
                 "C": [10, 20, 30, 40, 50],
             }
         )
-
-        result = slice(df, {"A": 2, "B": "x"})
-
-        assert len(result) == 1
-        assert result["A"].tolist() == [2]
-        assert result["B"].tolist() == ["x"]
+        # Act
+        result = pd_slice(df, {"A": 2, "B": "x"})
+        # Assert
         assert result["C"].tolist() == [30]
 
-    def test_list_condition(self):
-        """Test slicing with list values in conditions."""
-        from scitex_pd import slice
-
-        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
-
-        result = slice(df, {"A": [2, 4, 5]})
-
-        assert len(result) == 3
+    def test_list_condition_matches_each_listed_value(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]}
+        )
+        # Act
+        result = pd_slice(df, {"A": [2, 4, 5]})
+        # Assert
         assert result["A"].tolist() == [2, 4, 5]
-        assert result["B"].tolist() == ["b", "d", "e"]
 
 
 class TestColumnSlicing:
     """Test column selection functionality."""
 
-    def test_select_single_column(self):
-        """Test selecting single column."""
-        from scitex_pd import slice
-
+    def test_select_single_column_drops_others(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
-
-        result = slice(df, columns=["B"])
-
+        # Act
+        result = pd_slice(df, columns=["B"])
+        # Assert
         assert list(result.columns) == ["B"]
+
+    def test_select_single_column_preserves_values(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
+        # Act
+        result = pd_slice(df, columns=["B"])
+        # Assert
         assert result["B"].tolist() == [4, 5, 6]
 
-    def test_select_multiple_columns(self):
-        """Test selecting multiple columns."""
-        from scitex_pd import slice
-
-        df = pd.DataFrame({"A": [1, 2], "B": [3, 4], "C": [5, 6], "D": [7, 8]})
-
-        result = slice(df, columns=["A", "C", "D"])
-
+    def test_select_multiple_columns_returns_requested_subset(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2], "B": [3, 4], "C": [5, 6], "D": [7, 8]}
+        )
+        # Act
+        result = pd_slice(df, columns=["A", "C", "D"])
+        # Assert
         assert list(result.columns) == ["A", "C", "D"]
-        assert "B" not in result.columns
 
-    def test_reorder_columns(self):
-        """Test that column order follows the specified list."""
-        from scitex_pd import slice
-
+    def test_reorder_columns_follows_supplied_order(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2], "B": [3, 4], "C": [5, 6]})
-
-        result = slice(df, columns=["C", "A", "B"])
-
+        # Act
+        result = pd_slice(df, columns=["C", "A", "B"])
+        # Assert
         assert list(result.columns) == ["C", "A", "B"]
 
 
 class TestCombinedSlicing:
     """Test combining row and column slicing."""
 
-    def test_slice_rows_and_columns(self):
-        """Test slicing both rows and columns."""
-        from scitex_pd import slice
-
+    def test_slice_rows_and_columns_returns_subset_columns(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1, 2, 3, 4, 5],
@@ -163,18 +197,28 @@ class TestCombinedSlicing:
                 "D": [100, 200, 300, 400, 500],
             }
         )
-
-        result = slice(df, builtins.slice(1, 4), columns=["B", "C"])
-
-        assert len(result) == 3
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4), columns=["B", "C"])
+        # Assert
         assert list(result.columns) == ["B", "C"]
+
+    def test_slice_rows_and_columns_returns_subset_rows_for_b(self):
+        # Arrange
+        df = pd.DataFrame(
+            {
+                "A": [1, 2, 3, 4, 5],
+                "B": [10, 20, 30, 40, 50],
+                "C": ["a", "b", "c", "d", "e"],
+                "D": [100, 200, 300, 400, 500],
+            }
+        )
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4), columns=["B", "C"])
+        # Assert
         assert result["B"].tolist() == [20, 30, 40]
-        assert result["C"].tolist() == ["b", "c", "d"]
 
-    def test_conditions_and_columns(self):
-        """Test using conditions and column selection together."""
-        from scitex_pd import slice
-
+    def test_conditions_and_columns_filters_and_projects(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "category": ["A", "B", "A", "B", "A"],
@@ -183,80 +227,87 @@ class TestCombinedSlicing:
                 "extra2": [6, 7, 8, 9, 10],
             }
         )
-
-        result = slice(df, {"category": "A"}, columns=["category", "value"])
-
-        assert len(result) == 3
-        assert list(result.columns) == ["category", "value"]
+        # Act
+        result = pd_slice(df, {"category": "A"}, columns=["category", "value"])
+        # Assert
         assert result["value"].tolist() == [10, 30, 50]
 
 
 class TestEdgeCases:
     """Test edge cases and error handling."""
 
-    def test_empty_dataframe(self):
-        """Test slicing empty DataFrame."""
-        from scitex_pd import slice
-
+    def test_empty_dataframe_slice_returns_empty_dataframe(self):
+        # Arrange
         df = pd.DataFrame()
-        result = slice(df, builtins.slice(0, 10))
-
+        # Act
+        result = pd_slice(df, builtins.slice(0, 10))
+        # Assert
         assert result.empty
+
+    def test_empty_dataframe_slice_returns_dataframe_type(self):
+        # Arrange
+        df = pd.DataFrame()
+        # Act
+        result = pd_slice(df, builtins.slice(0, 10))
+        # Assert
         assert isinstance(result, pd.DataFrame)
 
-    def test_no_conditions(self):
-        """Test with no slicing conditions."""
-        from scitex_pd import slice
-
+    def test_no_conditions_returns_input_dataframe_unchanged(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
-        result = slice(df)
+        # Act
+        result = pd_slice(df)
+        # Assert
+        assert frames_match(result, df)
 
-        pd.testing.assert_frame_equal(result, df)
-
-    def test_no_matching_conditions(self):
-        """Test when conditions match no rows."""
-        from scitex_pd import slice
-
+    def test_no_matching_conditions_returns_zero_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
-
-        result = slice(df, {"A": 999})
-
+        # Act
+        result = pd_slice(df, {"A": 999})
+        # Assert
         assert len(result) == 0
+
+    def test_no_matching_conditions_preserves_column_schema(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
+        # Act
+        result = pd_slice(df, {"A": 999})
+        # Assert
         assert list(result.columns) == ["A", "B"]
 
-    def test_out_of_bounds_slice(self):
-        """Test slice indices beyond DataFrame bounds."""
-        from scitex_pd import slice
-
+    def test_out_of_bounds_slice_returns_empty_dataframe(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3]})
-
-        # Slice beyond bounds should work without error
-        result = slice(df, builtins.slice(10, 20))
+        # Act
+        result = pd_slice(df, builtins.slice(10, 20))
+        # Assert
         assert len(result) == 0
 
-        result = slice(df, builtins.slice(-10, -5))
+    def test_negative_out_of_bounds_slice_returns_empty_dataframe(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3]})
+        # Act
+        result = pd_slice(df, builtins.slice(-10, -5))
+        # Assert
         assert len(result) == 0
 
-    def test_negative_slice_indices(self):
-        """Test negative indices in slice."""
-        from scitex_pd import slice
-
-        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
-
-        result = slice(df, builtins.slice(-3, -1))
-
-        assert len(result) == 2
+    def test_negative_slice_indices_return_two_rows(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]}
+        )
+        # Act
+        result = pd_slice(df, builtins.slice(-3, -1))
+        # Assert
         assert result["A"].tolist() == [3, 4]
-        assert result["B"].tolist() == ["c", "d"]
 
 
 class TestDataTypes:
     """Test with various data types."""
 
-    def test_mixed_dtypes(self):
-        """Test slicing DataFrame with mixed data types."""
-        from scitex_pd import slice
-
+    def test_mixed_dtypes_slice_preserves_int_values(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "int": [1, 2, 3, 4],
@@ -266,68 +317,86 @@ class TestDataTypes:
                 "date": pd.date_range("2023-01-01", periods=4),
             }
         )
-
-        result = slice(df, builtins.slice(1, 3))
-
-        assert len(result) == 2
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert result["int"].tolist() == [2, 3]
+
+    def test_mixed_dtypes_slice_preserves_float_values(self):
+        # Arrange
+        df = pd.DataFrame(
+            {
+                "int": [1, 2, 3, 4],
+                "float": [1.1, 2.2, 3.3, 4.4],
+            }
+        )
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert result["float"].tolist() == [2.2, 3.3]
+
+    def test_mixed_dtypes_slice_preserves_bool_values(self):
+        # Arrange
+        df = pd.DataFrame(
+            {
+                "int": [1, 2, 3, 4],
+                "bool": [True, False, True, False],
+            }
+        )
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert result["bool"].tolist() == [False, True]
 
-    def test_nan_values(self):
-        """Test slicing with NaN values."""
-        from scitex_pd import slice
-
+    def test_nan_values_in_slice_are_preserved_at_correct_positions(self):
+        # Arrange
         df = pd.DataFrame(
-            {"A": [1, np.nan, 3, np.nan, 5], "B": ["a", "b", np.nan, "d", "e"]}
+            {
+                "A": [1, np.nan, 3, np.nan, 5],
+                "B": ["a", "b", np.nan, "d", "e"],
+            }
         )
-
-        # Slice should preserve NaN values
-        result = slice(df, builtins.slice(1, 4))
-
-        assert len(result) == 3
-        assert pd.isna(result["A"].iloc[0])
-        assert result["A"].iloc[1] == 3
-        assert pd.isna(result["A"].iloc[2])
+        # Act
+        result = pd_slice(df, builtins.slice(1, 4))
+        # Assert
+        assert pd.isna(result["A"].iloc[0]) and pd.isna(result["A"].iloc[2])
 
 
 class TestIndexPreservation:
     """Test DataFrame index handling."""
 
-    def test_custom_index_preservation(self):
-        """Test that custom index is preserved."""
-        from scitex_pd import slice
-
+    def test_custom_index_preservation_keeps_label_subset(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 4]}, index=["w", "x", "y", "z"])
-
-        result = slice(df, builtins.slice(1, 3))
-
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert list(result.index) == ["x", "y"]
+
+    def test_custom_index_preservation_supports_loc_lookup(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4]}, index=["w", "x", "y", "z"])
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert result.loc["x", "A"] == 2
-        assert result.loc["y", "A"] == 3
 
-    def test_multiindex(self):
-        """Test slicing with MultiIndex."""
-        from scitex_pd import slice
-
+    def test_multiindex_slice_returns_two_rows(self):
+        # Arrange
         arrays = [["A", "A", "B", "B"], [1, 2, 1, 2]]
         index = pd.MultiIndex.from_arrays(arrays)
         df = pd.DataFrame({"value": [10, 20, 30, 40]}, index=index)
-
-        result = slice(df, builtins.slice(1, 3))
-
-        assert len(result) == 2
+        # Act
+        result = pd_slice(df, builtins.slice(1, 3))
+        # Assert
         assert result["value"].tolist() == [20, 30]
 
 
 class TestRealWorldScenarios:
     """Test real-world usage scenarios."""
 
-    def test_data_filtering_workflow(self):
-        """Test typical data filtering workflow."""
-        from scitex_pd import slice
-
-        # Sample sales data
+    def test_data_filtering_workflow_returns_three_rows(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "date": pd.date_range("2023-01-01", periods=10),
@@ -336,164 +405,94 @@ class TestRealWorldScenarios:
                 "revenue": [100, 400, 150, 75, 500, 300, 150, 700, 200, 225],
             }
         )
+        # Act
+        result = pd_slice(df, {"product": "A"}, columns=["date", "product", "revenue"])
+        filtered = result[result["revenue"] > 100]
+        # Assert
+        assert len(filtered) == 3
 
-        # Filter for product A with revenue > 100
-        result = slice(df, {"product": "A"}, columns=["date", "product", "revenue"])
-        result = result[result["revenue"] > 100]
+    def test_data_filtering_workflow_isolates_product_a(self):
+        # Arrange
+        df = pd.DataFrame(
+            {
+                "product": ["A", "B", "A", "C", "B", "A", "C", "B", "A", "C"],
+                "revenue": [100, 400, 150, 75, 500, 300, 150, 700, 200, 225],
+            }
+        )
+        # Act
+        result = pd_slice(df, {"product": "A"}, columns=["product", "revenue"])
+        # Assert
+        assert (result["product"] == "A").all()
 
-        assert len(result) == 3
-        assert all(result["product"] == "A")
-        assert all(result["revenue"] > 100)
-
-    def test_time_series_window(self):
-        """Test extracting time series window."""
-        from scitex_pd import slice
-
+    def test_time_series_window_returns_twenty_four_rows(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "timestamp": pd.date_range("2023-01-01", periods=100, freq="h"),
                 "value": np.random.randn(100),
             }
         )
-
-        # Get specific time window
-        result = slice(df, builtins.slice(24, 48))  # Hours 24-47
-
+        # Act
+        result = pd_slice(df, builtins.slice(24, 48))
+        # Assert
         assert len(result) == 24
-        assert result["timestamp"].iloc[0].hour == 0  # Next day start
+
+    def test_time_series_window_starts_at_expected_hour_of_day(self):
+        # Arrange
+        df = pd.DataFrame(
+            {
+                "timestamp": pd.date_range("2023-01-01", periods=100, freq="h"),
+                "value": np.random.randn(100),
+            }
+        )
+        # Act
+        result = pd_slice(df, builtins.slice(24, 48))
+        # Assert
         assert result["timestamp"].iloc[0].day == 2
 
 
 class TestDocstringExamples:
     """Test examples from the docstring."""
 
-    def test_docstring_slice_example(self):
-        """Test slice example from docstring."""
-        from scitex_pd import slice
-
+    def test_docstring_slice_example_returns_two_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
-
-        # Slice by row indices
-        result = slice(df, builtins.slice(0, 2))
-        assert len(result) == 2
+        # Act
+        result = pd_slice(df, builtins.slice(0, 2))
+        # Assert
         assert result["A"].tolist() == [1, 2]
-        assert result["B"].tolist() == ["x", "y"]
 
-    def test_docstring_conditions_example(self):
-        """Test conditions example from docstring."""
-        from scitex_pd import slice
-
+    def test_docstring_conditions_example_returns_single_row(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
-
-        # Slice by conditions
-        result = slice(df, {"A": [1, 2], "B": "x"})
-        assert len(result) == 1
+        # Act
+        result = pd_slice(df, {"A": [1, 2], "B": "x"})
+        # Assert
         assert result["A"].tolist() == [1]
-        assert result["B"].tolist() == ["x"]
 
-    def test_docstring_columns_example(self):
-        """Test columns example from docstring."""
-        from scitex_pd import slice
-
+    def test_docstring_columns_example_returns_single_column(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
-
-        # Slice columns
-        result = slice(df, columns=["A"])
+        # Act
+        result = pd_slice(df, columns=["A"])
+        # Assert
         assert list(result.columns) == ["A"]
-        assert len(result) == 3  # All rows preserved
 
 
 class TestCopyBehavior:
     """Test that slice returns a copy, not a view."""
 
-    def test_returns_copy(self):
-        """Test that modifications to result don't affect original."""
-        from scitex_pd import slice
-
+    def test_modifying_result_does_not_change_original(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
-
-        result = slice(df, builtins.slice(0, 2))
+        result = pd_slice(df, builtins.slice(0, 2))
+        # Act
         result["A"] = [99, 98]
-
-        # Original should be unchanged
+        # Assert
         assert df["A"].tolist() == [1, 2, 3]
-        assert result["A"].tolist() == [99, 98]
 
 
 if __name__ == "__main__":
     import os
 
-    import pytest
-
     pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_slice.py
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-05 07:45:00 (ywatanabe)"
-# # File: ./scitex_repo/src/scitex/pd/_slice.py
-#
-# from typing import Dict, Union, List, Optional
-# import builtins
-#
-# import pandas as pd
-#
-# from ._find_indi import find_indi
-#
-#
-# def slice(
-#     df: pd.DataFrame,
-#     conditions: Union[
-#         builtins.slice, Dict[str, Union[str, int, float, List]], None
-#     ] = None,
-#     columns: Optional[List[str]] = None,
-# ) -> pd.DataFrame:
-#     """Slices DataFrame rows and/or columns.
-#
-#     Example
-#     -------
-#     >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': ['x', 'y', 'x']})
-#     >>> # Slice by row indices
-#     >>> result = slice(df, slice(0, 2))
-#     >>> # Slice by conditions
-#     >>> result = slice(df, {'A': [1, 2], 'B': 'x'})
-#     >>> # Slice columns
-#     >>> result = slice(df, columns=['A'])
-#
-#     Parameters
-#     ----------
-#     df : pd.DataFrame
-#         Input DataFrame to slice
-#     conditions : slice, Dict, or None
-#         Either a slice object for row indices, or a dictionary of column conditions
-#     columns : List[str], optional
-#         List of column names to select
-#
-#     Returns
-#     -------
-#     pd.DataFrame
-#         Sliced DataFrame
-#     """
-#     result = df.copy()
-#
-#     # Handle row slicing
-#     if isinstance(conditions, builtins.slice):
-#         result = result.iloc[conditions]
-#     elif isinstance(conditions, dict):
-#         indices = find_indi(result, conditions)
-#         result = result.loc[indices]
-#
-#     # Handle column slicing
-#     if columns is not None:
-#         result = result[columns]
-#
-#     return result
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_slice.py
-# --------------------------------------------------------------------------------

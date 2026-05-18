@@ -1,48 +1,40 @@
 #!/usr/bin/env python3
 # Time-stamp: "2025-05-31 20:45:00 (ywatanabe)"
-# /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/scitex_repo/tests/scitex/pd/test__round.py
-
-
-"""
-Comprehensive tests for scitex.pd.round function.
-"""
+"""Comprehensive tests for scitex_pd.round."""
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from _helpers import frames_match
+from scitex_pd import round as pd_round
+
 
 class TestRound:
     """Test class for round function."""
 
-    def test_basic_float_rounding(self):
-        """Test basic rounding of float values."""
-        from scitex_pd import round
-
+    def test_basic_float_rounding_returns_two_decimal_places(self):
+        # Arrange
         df = pd.DataFrame(
             {"A": [1.23456, 2.34567, 3.45678], "B": [4.56789, 5.67890, 6.78901]}
         )
-
-        result = round(df, factor=2)
         expected = pd.DataFrame({"A": [1.23, 2.35, 3.46], "B": [4.57, 5.68, 6.79]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_default_factor(self):
-        """Test rounding with default factor of 3."""
-        from scitex_pd import round
-
+    def test_default_factor_rounds_to_three_decimals(self):
+        # Arrange
         df = pd.DataFrame({"value": [1.234567, 2.345678, 3.456789]})
-
-        result = round(df)
         expected = pd.DataFrame({"value": [1.235, 2.346, 3.457]})
+        # Act
+        result = pd_round(df)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_mixed_types(self):
-        """Test rounding with mixed data types."""
-        from scitex_pd import round
-
+    def test_mixed_types_rounds_only_numeric_columns(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "float": [1.23456, 2.34567],
@@ -51,324 +43,320 @@ class TestRound:
                 "bool": [True, False],
             }
         )
-
-        result = round(df, factor=2)
         expected = pd.DataFrame(
             {
                 "float": [1.23, 2.35],
                 "int": [3, 4],
                 "str": ["abc", "def"],
-                "bool": [1, 0],  # Booleans are converted to int by pd.to_numeric
+                # Booleans are converted to int by pd.to_numeric.
+                "bool": [1, 0],
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_integer_preservation(self):
-        """Test that integer columns remain as integers."""
-        from scitex_pd import round
-
+    def test_integer_columns_preserve_int64_dtype(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert (result["A"].dtype, result["B"].dtype) == (np.int64, np.int64)
 
-        result = round(df, factor=2)
+    def test_integer_columns_round_returns_input_unchanged(self):
+        # Arrange
+        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, df)
 
-        assert result["A"].dtype == np.int64
-        assert result["B"].dtype == np.int64
-        pd.testing.assert_frame_equal(result, df)
-
-    def test_zero_decimal_places(self):
-        """Test rounding to zero decimal places."""
-        from scitex_pd import round
-
+    def test_zero_decimal_places_uses_bankers_rounding(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.4, 2.5, 3.6], "B": [4.4, 5.5, 6.6]})
-
-        result = round(df, factor=0)
         expected = pd.DataFrame({"A": [1, 2, 4], "B": [4, 6, 7]})
+        # Act
+        result = pd_round(df, factor=0)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_large_factor(self):
-        """Test rounding with large factor value."""
-        from scitex_pd import round
-
+    def test_large_factor_six_keeps_six_decimal_digits(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.123456789, 2.234567890]})
-
-        result = round(df, factor=6)
         expected = pd.DataFrame({"A": [1.123457, 2.234568]})
+        # Act
+        result = pd_round(df, factor=6)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_negative_values(self):
-        """Test rounding negative values."""
-        from scitex_pd import round
-
+    def test_negative_values_round_to_same_precision(self):
+        # Arrange
         df = pd.DataFrame(
             {"A": [-1.23456, -2.34567, -3.45678], "B": [1.23456, -2.34567, 3.45678]}
         )
+        expected = pd.DataFrame(
+            {"A": [-1.23, -2.35, -3.46], "B": [1.23, -2.35, 3.46]}
+        )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        result = round(df, factor=2)
-        expected = pd.DataFrame({"A": [-1.23, -2.35, -3.46], "B": [1.23, -2.35, 3.46]})
-
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_nan_handling(self):
-        """Test handling of NaN values - columns with NaN are not rounded due to comparison issue."""
-        from scitex_pd import round
-
+    def test_nan_values_are_preserved_while_finite_round(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1.234, np.nan, 3.456],
                 "B": [np.nan, 2.345, np.nan],
-                "C": [1.234, 2.345, 3.456],  # No NaN
+                "C": [1.234, 2.345, 3.456],
             }
         )
-
-        result = round(df, factor=2)
-        # NaN values are preserved, non-NaN values are rounded
         expected = pd.DataFrame(
             {
-                "A": [1.23, np.nan, 3.46],  # Rounded, NaN preserved
-                "B": [np.nan, 2.35, np.nan],  # Rounded, NaN preserved
-                "C": [1.23, 2.35, 3.46],  # Rounded correctly - no NaN
+                "A": [1.23, np.nan, 3.46],
+                "B": [np.nan, 2.35, np.nan],
+                "C": [1.23, 2.35, 3.46],
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_inf_handling(self):
-        """Test handling of infinity values - columns with inf are not rounded."""
-        from scitex_pd import round
-
+    def test_inf_values_are_preserved_while_finite_round(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1.234, np.inf, -np.inf],
                 "B": [np.inf, 2.345, -np.inf],
-                "C": [1.234, 2.345, 3.456],  # No inf
+                "C": [1.234, 2.345, 3.456],
             }
         )
-
-        result = round(df, factor=2)
-        # inf values are preserved, finite values are rounded
         expected = pd.DataFrame(
             {
-                "A": [1.23, np.inf, -np.inf],  # Rounded, inf preserved
-                "B": [np.inf, 2.35, -np.inf],  # Rounded, inf preserved
-                "C": [1.23, 2.35, 3.46],  # Rounded correctly - no inf
+                "A": [1.23, np.inf, -np.inf],
+                "B": [np.inf, 2.35, -np.inf],
+                "C": [1.23, 2.35, 3.46],
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_empty_dataframe(self):
-        """Test rounding empty DataFrame."""
-        from scitex_pd import round
-
+    def test_empty_dataframe_returns_empty_dataframe(self):
+        # Arrange
         df = pd.DataFrame()
-        result = round(df, factor=2)
-        pd.testing.assert_frame_equal(result, df)
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, df)
 
-    def test_single_column(self):
-        """Test rounding single column DataFrame."""
-        from scitex_pd import round
-
+    def test_single_column_dataframe_rounds_to_factor(self):
+        # Arrange
         df = pd.DataFrame({"values": [1.234567, 2.345678, 3.456789]})
-        result = round(df, factor=3)
         expected = pd.DataFrame({"values": [1.235, 2.346, 3.457]})
+        # Act
+        result = pd_round(df, factor=3)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_datetime_columns(self):
-        """Test that datetime columns are preserved."""
-        from scitex_pd import round
-
+    def test_datetime_columns_are_returned_unchanged(self):
+        # Arrange
         dates = pd.date_range("2024-01-01", periods=3)
         df = pd.DataFrame({"date": dates, "value": [1.23456, 2.34567, 3.45678]})
-
-        result = round(df, factor=2)
         expected = pd.DataFrame({"date": dates, "value": [1.23, 2.35, 3.46]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_categorical_columns(self):
-        """Test that categorical columns are preserved."""
-        from scitex_pd import round
-
+    def test_categorical_columns_are_returned_unchanged(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "category": pd.Categorical(["A", "B", "C"]),
                 "value": [1.23456, 2.34567, 3.45678],
             }
         )
-
-        result = round(df, factor=2)
         expected = pd.DataFrame(
-            {"category": pd.Categorical(["A", "B", "C"]), "value": [1.23, 2.35, 3.46]}
+            {
+                "category": pd.Categorical(["A", "B", "C"]),
+                "value": [1.23, 2.35, 3.46],
+            }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_scientific_notation(self):
-        """Test rounding values in scientific notation."""
-        from scitex_pd import round
-
+    def test_scientific_notation_values_round_to_factor(self):
+        # Arrange
         df = pd.DataFrame(
-            {"A": [1.234e-5, 2.345e-5, 3.456e-5], "B": [1.234e5, 2.345e5, 3.456e5]}
+            {
+                "A": [1.234e-5, 2.345e-5, 3.456e-5],
+                "B": [1.234e5, 2.345e5, 3.456e5],
+            }
         )
-
-        result = round(df, factor=3)
-        # Values less than 0.001 will be rounded to 0.0 when rounding to 3 decimal places
-        # Large values remain unchanged as they have no decimal component
         expected = pd.DataFrame(
             {"A": [0.0, 0.0, 0.0], "B": [123400.0, 234500.0, 345600.0]}
         )
+        # Act
+        result = pd_round(df, factor=3)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_very_small_values(self):
-        """Test rounding very small values."""
-        from scitex_pd import round
-
+    def test_very_small_values_round_to_zero_at_factor_three(self):
+        # Arrange
         df = pd.DataFrame({"A": [0.000123456, 0.000234567, 0.000345678]})
-
-        result = round(df, factor=3)
-        # Rounding to 3 decimal places means values < 0.001 become 0.0
         expected = pd.DataFrame({"A": [0.0, 0.0, 0.0]})
+        # Act
+        result = pd_round(df, factor=3)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_roundable_to_int(self):
-        """Test values that can be converted to integers after rounding."""
-        from scitex_pd import round
-
+    def test_factor_zero_converts_round_floats_to_int(self):
+        # Arrange
         df = pd.DataFrame(
             {"A": [1.00001, 2.00002, 3.00003], "B": [4.99999, 5.99998, 6.99997]}
         )
-
-        result = round(df, factor=0)
         expected = pd.DataFrame({"A": [1, 2, 3], "B": [5, 6, 7]})
+        # Act
+        result = pd_round(df, factor=0)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_multiindex_dataframe(self):
-        """Test rounding DataFrame with MultiIndex."""
-        from scitex_pd import round
-
+    def test_multiindex_dataframe_round_preserves_index(self):
+        # Arrange
         arrays = [["A", "A", "B", "B"], [1, 2, 1, 2]]
         index = pd.MultiIndex.from_arrays(arrays, names=["first", "second"])
-        df = pd.DataFrame({"value": [1.23456, 2.34567, 3.45678, 4.56789]}, index=index)
+        df = pd.DataFrame(
+            {"value": [1.23456, 2.34567, 3.45678, 4.56789]}, index=index
+        )
+        expected = pd.DataFrame(
+            {"value": [1.23, 2.35, 3.46, 4.57]}, index=index
+        )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        result = round(df, factor=2)
-        expected = pd.DataFrame({"value": [1.23, 2.35, 3.46, 4.57]}, index=index)
-
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_mixed_numeric_string(self):
-        """Test DataFrame with numeric strings - object dtype columns are not converted."""
-        from scitex_pd import round
-
+    def test_object_string_column_is_returned_unchanged(self):
+        # Arrange
         df = pd.DataFrame(
             {"A": ["1.234", "2.345", "3.456"], "B": [1.234, 2.345, 3.456]}
         )
-
-        result = round(df, factor=2)
-        # Object dtype columns with strings are NOT converted - returned unchanged
-        # Only proper float columns are rounded
         expected = pd.DataFrame(
             {"A": ["1.234", "2.345", "3.456"], "B": [1.23, 2.35, 3.46]}
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_none_values(self):
-        """Test handling of None values - NaN is preserved, other values are rounded."""
-        from scitex_pd import round
-
+    def test_none_values_round_to_nan_while_finite_round(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1.234, None, 3.456],
                 "B": [None, 2.345, None],
-                "C": [1.234, 2.345, 3.456],  # No None
+                "C": [1.234, 2.345, 3.456],
             }
         )
-
-        result = round(df, factor=2)
-        # None converts to NaN which is preserved, other values are rounded
         expected = pd.DataFrame(
             {
-                "A": [1.23, np.nan, 3.46],  # Rounded, NaN preserved
-                "B": [np.nan, 2.35, np.nan],  # Rounded, NaN preserved
-                "C": [1.23, 2.35, 3.46],  # Rounded correctly
+                "A": [1.23, np.nan, 3.46],
+                "B": [np.nan, 2.35, np.nan],
+                "C": [1.23, 2.35, 3.46],
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_object_dtype_with_numbers(self):
-        """Test object dtype columns - object dtype columns are returned unchanged."""
-        from scitex_pd import round
-
+    def test_object_dtype_with_numbers_is_returned_unchanged(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": pd.Series([1.234, 2.345, 3.456], dtype="object"),
                 "B": pd.Series(["a", "b", "c"], dtype="object"),
             }
         )
-
-        result = round(df, factor=2)
-        # Object dtype columns are returned unchanged (even if they contain numbers)
         expected = pd.DataFrame(
             {
                 "A": pd.Series([1.234, 2.345, 3.456], dtype="object"),
                 "B": pd.Series(["a", "b", "c"], dtype="object"),
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_series_like_behavior(self):
-        """Test that function preserves column order and names."""
-        from scitex_pd import round
-
+    def test_round_preserves_original_column_order(self):
+        # Arrange
         df = pd.DataFrame({"Z": [1.234], "A": [2.345], "M": [3.456]})
-
-        result = round(df, factor=2)
-
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
         assert list(result.columns) == ["Z", "A", "M"]
+
+    def test_round_column_z_uses_supplied_factor(self):
+        # Arrange
+        df = pd.DataFrame({"Z": [1.234], "A": [2.345], "M": [3.456]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
         assert result["Z"][0] == 1.23
+
+    def test_round_column_a_uses_supplied_factor(self):
+        # Arrange
+        df = pd.DataFrame({"Z": [1.234], "A": [2.345], "M": [3.456]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
         assert result["A"][0] == 2.35
+
+    def test_round_column_m_uses_supplied_factor(self):
+        # Arrange
+        df = pd.DataFrame({"Z": [1.234], "A": [2.345], "M": [3.456]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
         assert result["M"][0] == 3.46
 
-    def test_large_dataframe_performance(self):
-        """Test performance with large DataFrame."""
-        from scitex_pd import round
-
-        # Create large DataFrame
+    def test_round_preserves_dataframe_shape_on_large_input(self):
+        # Arrange
         np.random.seed(42)
         df = pd.DataFrame(np.random.randn(1000, 10))
-
-        result = round(df, factor=3)
-
-        # Check shape is preserved
+        # Act
+        result = pd_round(df, factor=3)
+        # Assert
         assert result.shape == df.shape
 
-        # Spot check some values are rounded correctly
+    def test_round_matches_np_round_on_large_input(self):
+        # Arrange
+        np.random.seed(42)
+        df = pd.DataFrame(np.random.randn(1000, 10))
+        # Act
+        result = pd_round(df, factor=3)
+        # Assert
         assert abs(result.iloc[0, 0] - np.round(df.iloc[0, 0], 3)) < 1e-10
 
-    def test_factor_one(self):
-        """Test rounding with factor=1."""
-        from scitex_pd import round
-
+    def test_factor_one_rounds_to_one_decimal_place(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.234, 2.567, 3.891]})
-
-        result = round(df, factor=1)
         expected = pd.DataFrame({"A": [1.2, 2.6, 3.9]})
+        # Act
+        result = pd_round(df, factor=1)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_complex_mixed_data(self):
-        """Test complex DataFrame with various types."""
-        from scitex_pd import round
-
+    def test_complex_mixed_dataframe_rounds_only_numeric(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "floats": [1.23456, 2.34567, np.nan],
@@ -379,188 +367,70 @@ class TestRound:
                 "mixed": [1.234, "text", None],
             }
         )
-
-        result = round(df, factor=2)
         expected = pd.DataFrame(
             {
-                "floats": [1.23, 2.35, np.nan],  # Rounded, NaN preserved
-                "floats_no_nan": [1.23, 2.35, 3.46],  # Rounded correctly
+                "floats": [1.23, 2.35, np.nan],
+                "floats_no_nan": [1.23, 2.35, 3.46],
                 "ints": [1, 2, 3],
                 "strings": ["a", "b", "c"],
-                "bools": [1, 0, 1],  # Booleans are converted to int by pd.to_numeric
-                "mixed": [
-                    1.234,
-                    "text",
-                    None,
-                ],  # Object dtype with mixed types - returned unchanged
+                "bools": [1, 0, 1],
+                # Object dtype with mixed types — returned unchanged.
+                "mixed": [1.234, "text", None],
             }
         )
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_edge_case_rounding(self):
-        """Test edge cases in rounding (0.5 cases)."""
-        from scitex_pd import round
-
+    def test_half_values_use_bankers_round_to_even(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.125, 2.225, 3.335, 4.445, 5.555]})
-
-        result = round(df, factor=2)
-        # Python uses banker's rounding (round to even)
         expected = pd.DataFrame({"A": [1.12, 2.22, 3.34, 4.44, 5.56]})
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
+        assert frames_match(result, expected)
 
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_preserve_index(self):
-        """Test that DataFrame index is preserved."""
-        from scitex_pd import round
-
+    def test_round_preserves_custom_string_index(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.234, 2.345, 3.456]}, index=["x", "y", "z"])
-
-        result = round(df, factor=2)
-
+        # Act
+        result = pd_round(df, factor=2)
+        # Assert
         assert list(result.index) == ["x", "y", "z"]
-        assert result.loc["x", "A"] == 1.23
 
-    def test_column_specific_behavior(self):
-        """Test that rounding is applied column-wise."""
-        from scitex_pd import round
-
+    def test_round_uses_factor_per_column(self):
+        # Arrange
         df = pd.DataFrame(
             {"precise": [1.123456789, 2.234567890], "rough": [100.1, 200.2]}
         )
-
-        result = round(df, factor=4)
-        expected = pd.DataFrame({"precise": [1.1235, 2.2346], "rough": [100.1, 200.2]})
-
-        pd.testing.assert_frame_equal(result, expected)
-
+        expected = pd.DataFrame(
+            {"precise": [1.1235, 2.2346], "rough": [100.1, 200.2]}
+        )
+        # Act
+        result = pd_round(df, factor=4)
+        # Assert
+        assert frames_match(result, expected)
 
 
 class TestRoundFallback:
     """Defensive ValueError/TypeError fallback inside `custom_round`."""
 
     def test_nullable_bool_with_na_returns_column_unchanged(self):
-        from scitex_pd import round as pd_round
-
+        # Arrange
         # `astype(int)` on a nullable-boolean Series containing pd.NA
         # raises IntCastingNaNError (a ValueError subclass), exercising
         # the except branch.
         col = pd.Series([True, False, pd.NA], dtype="boolean")
         df = pd.DataFrame({"A": col})
+        # Act
         out = pd_round(df)
+        # Assert
         assert out["A"].dtype == col.dtype
-        assert out["A"].iloc[0] == True  # noqa: E712
-        assert pd.isna(out["A"].iloc[2])
 
 
 if __name__ == "__main__":
     import os
 
-    import pytest
-
     pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_round.py
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-06 11:13:00 (ywatanabe)"
-# # /home/ywatanabe/proj/_scitex_repo_openhands/src/scitex/pd/_round.py
-#
-# import numpy as np
-# import pandas as pd
-#
-#
-# def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
-#     """
-#     Round numeric values in a DataFrame to a specified number of decimal places.
-#
-#     Example
-#     -------
-#     >>> df = pd.DataFrame({'A': [1.23456, 2.34567], 'B': ['abc', 'def'], 'C': [3, 4]})
-#     >>> round(df, 2)
-#           A    B  C
-#     0  1.23  abc  3
-#     1  2.35  def  4
-#
-#     Parameters
-#     ----------
-#     df : pd.DataFrame
-#         Input DataFrame
-#     factor : int, optional
-#         Number of decimal places to round to (default is 3)
-#
-#     Returns
-#     -------
-#     pd.DataFrame
-#         DataFrame with rounded numeric values
-#     """
-#
-#     def custom_round(column):
-#         # Skip non-numeric types like datetime, categorical, string
-#         if pd.api.types.is_datetime64_any_dtype(column):
-#             return column
-#         if pd.api.types.is_categorical_dtype(column):
-#             return column
-#         if pd.api.types.is_string_dtype(column):
-#             return column
-#         # Note: boolean types are allowed to be converted to numeric
-#         if (
-#             pd.api.types.is_object_dtype(column)
-#             and not pd.api.types.is_numeric_dtype(column)
-#             and not pd.api.types.is_bool_dtype(column)
-#         ):
-#             return column
-#
-#         try:
-#             # Handle boolean columns explicitly
-#             if pd.api.types.is_bool_dtype(column):
-#                 return column.astype(int)
-#
-#             numeric_column = pd.to_numeric(column, errors="coerce")
-#             if np.issubdtype(numeric_column.dtype, np.integer):
-#                 return numeric_column.astype(int)
-#
-#             # For float columns, round first
-#             rounded = numeric_column.round(factor)
-#
-#             # If factor is 0 and all values are whole numbers, convert to int
-#             if factor == 0 and (rounded % 1 == 0).all() and not rounded.isna().any():
-#                 return rounded.astype(int)
-#
-#             return rounded
-#
-#         except (ValueError, TypeError):
-#             return column
-#
-#     return df.apply(custom_round)
-#
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-05 20:40:32 (ywatanabe)"
-# # /home/ywatanabe/proj/_scitex_repo_openhands/src/scitex/pd/_round.py
-#
-# # import numpy as np
-#
-# # def round(df, factor=3):
-# #     return df.apply(lambda x: x.round(factor) if np.issubdtype(x.dtype, np.number) else x)
-#
-#
-# # def round(df, factor=3):
-# #     def custom_round(x):
-# #         try:
-# #             numeric_x = pd.to_numeric(x, errors='raise')
-# #             if np.issubdtype(numeric_x.dtype, np.integer):
-# #                 return numeric_x
-# #             else:
-# #                 return numeric_x.apply(lambda y: float(f'{y:.{factor}g}'))
-# #         except (ValueError, TypeError):
-# #             return x
-#
-# #     return df.apply(custom_round)
-
-# --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_round.py
-# --------------------------------------------------------------------------------

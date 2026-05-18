@@ -1,308 +1,223 @@
 #!/usr/bin/env python3
-# Timestamp: "2025-06-01 20:05:00 (ywatanabe)"
-# File: ./tests/scitex/pd/test__to_xy.py
-
-"""
-Test module for scitex.pd.to_xy function.
-"""
+"""Tests for scitex_pd.to_xy."""
 
 import numpy as np
 import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal
+
+from scitex_pd import to_xy
+
+
+@pytest.fixture
+def square_df():
+    """A square DataFrame used across the suite."""
+    data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    return pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
+
+
+@pytest.fixture
+def numeric_index_df():
+    """A DataFrame with numeric index and named columns."""
+    data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    return pd.DataFrame(data, index=[0, 1, 2], columns=["A", "B", "C"])
+
+
+@pytest.fixture
+def numeric_columns_df():
+    """A DataFrame with named index and numeric columns."""
+    data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    return pd.DataFrame(data, index=["A", "B", "C"], columns=[0, 1, 2])
 
 
 class TestToXY:
     """Test class for to_xy function."""
 
-    @pytest.fixture
-    def square_df(self):
-        """Create a square DataFrame for testing."""
-        data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        return pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
+    def test_to_xy_symbol_is_callable_after_import(self):
+        # Arrange
+        from scitex_pd import to_xy as imported
+        # Act
+        target = imported
+        # Assert
+        assert callable(target)
 
-    @pytest.fixture
-    def numeric_index_df(self):
-        """Create a DataFrame with numeric index and named columns."""
-        data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        return pd.DataFrame(data, index=[0, 1, 2], columns=["A", "B", "C"])
+    def test_basic_conversion_returns_nine_by_three_dataframe(self, square_df):
+        # Arrange
+        df = square_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert result.shape == (9, 3)
 
-    @pytest.fixture
-    def numeric_columns_df(self):
-        """Create a DataFrame with named index and numeric columns."""
-        data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        return pd.DataFrame(data, index=["A", "B", "C"], columns=[0, 1, 2])
-
-    def test_import(self):
-        """Test that to_xy can be imported."""
-        from scitex_pd import to_xy
-
-        assert callable(to_xy)
-
-    def test_basic_conversion(self, square_df):
-        """Test basic conversion of square DataFrame."""
-        from scitex_pd import to_xy
-
-        result = to_xy(square_df)
-
-        # Check shape
-        assert result.shape == (9, 3)  # 3x3 matrix = 9 rows
-
-        # Check columns
+    def test_basic_conversion_uses_xyz_column_names(self, square_df):
+        # Arrange
+        df = square_df
+        # Act
+        result = to_xy(df)
+        # Assert
         assert list(result.columns) == ["x", "y", "z"]
 
-        # Check values
-        expected_values = [
-            ("A", "A", 1),
-            ("B", "A", 4),
-            ("C", "A", 7),
-            ("A", "B", 2),
-            ("B", "B", 5),
-            ("C", "B", 8),
-            ("A", "C", 3),
-            ("B", "C", 6),
-            ("C", "C", 9),
-        ]
+    def test_basic_conversion_preserves_first_row_value(self, square_df):
+        # Arrange
+        df = square_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert (
+            result.iloc[0]["x"],
+            result.iloc[0]["y"],
+            result.iloc[0]["z"],
+        ) == ("A", "A", 1)
 
-        for i, (x, y, z) in enumerate(expected_values):
-            assert result.iloc[i]["x"] == x
-            assert result.iloc[i]["y"] == y
-            assert result.iloc[i]["z"] == z
+    def test_numeric_index_collapses_to_unique_numeric_x_labels(
+        self, numeric_index_df
+    ):
+        # Arrange
+        df = numeric_index_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert sorted(result["x"].unique()) == [0, 1, 2]
 
-    def test_numeric_index_replacement(self, numeric_index_df):
-        """Test behavior when index is numeric and columns are named.
+    def test_numeric_index_collapses_to_unique_numeric_y_labels(
+        self, numeric_index_df
+    ):
+        # Arrange
+        df = numeric_index_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert sorted(result["y"].unique()) == [0, 1, 2]
 
-        The source code sets columns = index when index is numeric [0,1,2],
-        so both become [0, 1, 2].
-        """
-        from scitex_pd import to_xy
+    def test_numeric_columns_collapse_to_unique_numeric_y_labels(
+        self, numeric_columns_df
+    ):
+        # Arrange
+        df = numeric_columns_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert sorted(result["y"].unique()) == [0, 1, 2]
 
-        result = to_xy(numeric_index_df)
-
-        # After replacement, both index and columns become [0, 1, 2]
-        assert result.shape == (9, 3)
-
-        # x and y values are now 0, 1, 2 (not 'A', 'B', 'C')
-        unique_x = sorted(result["x"].unique())
-        assert unique_x == [0, 1, 2]
-
-        # Check y values
-        unique_y = sorted(result["y"].unique())
-        assert unique_y == [0, 1, 2]
-
-    def test_numeric_columns_replacement(self, numeric_columns_df):
-        """Test behavior when columns are numeric and index is named.
-
-        The source code sets index = columns when columns is numeric [0,1,2],
-        so both become [0, 1, 2].
-        """
-        from scitex_pd import to_xy
-
-        result = to_xy(numeric_columns_df)
-
-        # After replacement, both index and columns become [0, 1, 2]
-        assert result.shape == (9, 3)
-
-        # x and y values are now 0, 1, 2 (not 'A', 'B', 'C')
-        unique_y = sorted(result["y"].unique())
-        assert unique_y == [0, 1, 2]
-
-    def test_non_square_dataframe(self):
-        """Test that non-square DataFrame raises assertion error."""
-        from scitex_pd import to_xy
-
-        # Create non-square DataFrame
+    def test_non_square_dataframe_raises_assertion_error(self):
+        # Arrange
         df = pd.DataFrame(np.array([[1, 2], [3, 4], [5, 6]]))
-
-        with pytest.raises(AssertionError):
+        # Act
+        ctx = pytest.raises(AssertionError)
+        # Assert
+        with ctx:
             to_xy(df)
 
-    def test_identity_matrix(self):
-        """Test conversion of identity matrix."""
-        from scitex_pd import to_xy
-
-        # Create identity matrix
+    def test_identity_matrix_diagonal_entries_are_one(self):
+        # Arrange
         data = np.eye(3)
         df = pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
-
+        # Act
         result = to_xy(df)
+        diagonal = result[result["x"] == result["y"]]
+        # Assert
+        assert (diagonal["z"] == 1.0).all()
 
-        # Check diagonal values are 1
-        diagonal = result[(result["x"] == result["y"])]
-        assert all(diagonal["z"] == 1.0)
+    def test_identity_matrix_off_diagonal_entries_are_zero(self):
+        # Arrange
+        data = np.eye(3)
+        df = pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
+        # Act
+        result = to_xy(df)
+        off_diag = result[result["x"] != result["y"]]
+        # Assert
+        assert (off_diag["z"] == 0.0).all()
 
-        # Check off-diagonal values are 0
-        off_diagonal = result[(result["x"] != result["y"])]
-        assert all(off_diagonal["z"] == 0.0)
-
-    def test_single_element_dataframe(self):
-        """Test conversion of 1x1 DataFrame."""
-        from scitex_pd import to_xy
-
+    def test_single_element_dataframe_returns_one_by_three(self):
+        # Arrange
         df = pd.DataFrame([[42]], index=["A"], columns=["A"])
+        # Act
         result = to_xy(df)
-
+        # Assert
         assert result.shape == (1, 3)
-        assert result.iloc[0]["x"] == "A"
-        assert result.iloc[0]["y"] == "A"
+
+    def test_single_element_dataframe_first_z_value_is_input_value(self):
+        # Arrange
+        df = pd.DataFrame([[42]], index=["A"], columns=["A"])
+        # Act
+        result = to_xy(df)
+        # Assert
         assert result.iloc[0]["z"] == 42
 
-    def test_with_nan_values(self):
-        """Test handling of NaN values."""
-        from scitex_pd import to_xy
-
-        data = np.array([[1, np.nan, 3], [4, 5, np.nan], [np.nan, 8, 9]])
+    def test_nan_values_are_preserved_in_z_column(self):
+        # Arrange
+        data = np.array(
+            [[1, np.nan, 3], [4, 5, np.nan], [np.nan, 8, 9]]
+        )
         df = pd.DataFrame(data, index=["A", "B", "C"], columns=["A", "B", "C"])
-
+        # Act
         result = to_xy(df)
+        # Assert
+        assert result["z"].isna().sum() == 3
 
-        # Check that NaN values are preserved
-        nan_rows = result[result["z"].isna()]
-        assert len(nan_rows) == 3
-
-    def test_column_order_preserved(self, square_df):
-        """Test that the order of columns is preserved in output."""
-        from scitex_pd import to_xy
-
-        result = to_xy(square_df)
-
-        # Group by 'y' to check order
-        y_values = []
-        for _, group in result.groupby("y", sort=False):
-            y_values.append(group["y"].iloc[0])
-
+    def test_column_order_preserved_when_grouping_by_y_unsorted(
+        self, square_df
+    ):
+        # Arrange
+        df = square_df
+        # Act
+        result = to_xy(df)
+        y_values = [
+            group["y"].iloc[0]
+            for _, group in result.groupby("y", sort=False)
+        ]
+        # Assert
         assert y_values == ["A", "B", "C"]
 
-    def test_index_order_preserved(self, square_df):
-        """Test that the order of index is preserved in output."""
-        from scitex_pd import to_xy
+    def test_index_order_preserved_for_first_column_block(self, square_df):
+        # Arrange
+        df = square_df
+        # Act
+        result = to_xy(df)
+        # Assert
+        assert list(result.iloc[:3]["x"]) == ["A", "B", "C"]
 
-        result = to_xy(square_df)
-
-        # Check first three rows (should be column 'A')
-        first_col_x = list(result.iloc[:3]["x"])
-        assert first_col_x == ["A", "B", "C"]
-
-    def test_with_duplicate_index_names(self):
-        """Test behavior with duplicate index/column names.
-
-        When columns have duplicates, df[column] returns a DataFrame instead of
-        Series, which causes AttributeError since DataFrame has no .name attribute.
-        This is a limitation of the source code.
-        """
-        from scitex_pd import to_xy
-
-        # Duplicate column names cause issues - df[column] returns DataFrame
+    def test_duplicate_index_names_raise_attribute_error(self):
+        # Arrange
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         df = pd.DataFrame(data, index=["A", "A", "B"], columns=["A", "A", "B"])
-
-        # Duplicate columns cause AttributeError (DataFrame has no .name)
-        with pytest.raises(AttributeError):
+        # Act
+        ctx = pytest.raises(AttributeError)
+        # Assert
+        with ctx:
             to_xy(df)
 
-    def test_mismatched_index_columns_no_error(self):
-        """Test behavior with mismatched non-numeric index/columns.
-
-        The source code has `ValueError` without `raise`, so no exception is raised.
-        The function proceeds and produces output using the mismatched labels.
-        """
-        from scitex_pd import to_xy
-
-        # Both index and columns are non-numeric but different
+    def test_mismatched_non_numeric_labels_yields_nine_row_output(self):
+        # Arrange
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         df = pd.DataFrame(data, index=["A", "B", "C"], columns=["X", "Y", "Z"])
-
-        # No exception is raised (bug in source - ValueError without raise)
-        # The function proceeds with mismatched labels
+        # Act
         result = to_xy(df)
+        # Assert
         assert result.shape == (9, 3)
-        # x values come from the index, y from columns
+
+    def test_mismatched_labels_keep_distinct_x_and_y_label_sets(self):
+        # Arrange
+        data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        df = pd.DataFrame(data, index=["A", "B", "C"], columns=["X", "Y", "Z"])
+        # Act
+        result = to_xy(df)
+        # Assert
         assert set(result["x"].unique()) == {"A", "B", "C"}
-        assert set(result["y"].unique()) == {"X", "Y", "Z"}
 
-    @pytest.mark.parametrize("dtype", [int, float, np.float32, np.float64])
-    def test_different_dtypes(self, dtype):
-        """Test conversion with different data types."""
-        from scitex_pd import to_xy
-
+    @pytest.mark.parametrize(
+        "dtype", [int, float, np.float32, np.float64]
+    )
+    def test_different_dtypes_preserve_numeric_z_column(self, dtype):
+        # Arrange
         data = np.array([[1, 2], [3, 4]], dtype=dtype)
         df = pd.DataFrame(data, index=["A", "B"], columns=["A", "B"])
-
+        # Act
         result = to_xy(df)
-        assert result.shape == (4, 3)
-        # Z values should maintain numeric type
+        # Assert
         assert pd.api.types.is_numeric_dtype(result["z"])
 
 
 if __name__ == "__main__":
     import os
 
-    import pytest
-
     pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_to_xy.py
-# --------------------------------------------------------------------------------
-# #!/./env/bin/python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-09-03 07:01:31 (ywatanabe)"
-# # ./src/scitex/pd/_to_xy.py
-#
-# import scitex
-# import numpy as np
-# import pandas as pd
-#
-#
-# def to_xy(data_frame):
-#     """
-#     Convert a heatmap DataFrame into x, y, z format.
-#
-#     Ensure the index and columns are the same, and if either exists, replace with that.
-#
-#     Example
-#     -------
-#     data_frame = pd.DataFrame(...)  # Your DataFrame here
-#     out = to_xy(data_frame)
-#     print(out)
-#
-#     Parameters
-#     ----------
-#     data_frame : pandas.DataFrame
-#         The input DataFrame to be converted.
-#
-#     Returns
-#     -------
-#     pandas.DataFrame
-#         A DataFrame formatted with columns ['x', 'y', 'z']
-#     """
-#     assert data_frame.shape[0] == data_frame.shape[1]
-#
-#     if not data_frame.index.equals(data_frame.columns):
-#         if (data_frame.index == np.array(range(len(data_frame.index)))).all():
-#             data_frame.columns = data_frame.index
-#         elif (data_frame.columns == np.array(range(len(data_frame.columns)))).all():
-#             data_frame.index = data_frame.columns
-#         else:
-#             ValueError
-#         # else:
-#         #     ValueError "Either of index or columns has to be passed"
-#
-#     formatted_data_frames = []
-#
-#     for column in data_frame.columns:
-#         column_data_frame = data_frame[column]
-#         y_label = column_data_frame.name
-#         column_data_frame = pd.DataFrame(column_data_frame)
-#         column_data_frame["x"] = column_data_frame.index
-#         column_data_frame["y"] = y_label
-#         column_data_frame = column_data_frame.reset_index().drop(columns=["index"])
-#         column_data_frame = column_data_frame.rename(columns={y_label: "z"})
-#         column_data_frame = scitex.pd.mv(column_data_frame, "z", -1)
-#         formatted_data_frames.append(column_data_frame)
-#
-#     return pd.concat(formatted_data_frames, ignore_index=True)
-
-# --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_to_xy.py
-# --------------------------------------------------------------------------------
