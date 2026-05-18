@@ -1,68 +1,69 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 10:00:00 (ywatanabe)"
-# File: ./tests/scitex/pd/test__find_indi.py
-
-import os
-import sys
-import tempfile
-from unittest.mock import MagicMock, Mock, patch
+"""Tests for scitex_pd.find_indi."""
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from scitex_pd import find_indi
+
 
 class TestFindIndiBasic:
     """Test basic functionality of find_indi."""
 
-    def test_single_condition_string(self):
-        """Test finding indices with single string condition."""
-        from scitex_pd import find_indi
-
+    def test_single_string_condition_returns_indices_list(self):
+        # Arrange
         df = pd.DataFrame({"A": ["x", "y", "x", "z"], "B": [1, 2, 3, 4]})
         conditions = {"A": "x"}
+        # Act
         result = find_indi(df, conditions)
-
+        # Assert
         assert isinstance(result, list)
+
+    def test_single_string_condition_matches_expected_rows(self):
+        # Arrange
+        df = pd.DataFrame({"A": ["x", "y", "x", "z"], "B": [1, 2, 3, 4]})
+        conditions = {"A": "x"}
+        # Act
+        result = find_indi(df, conditions)
+        # Assert
         assert result == [0, 2]
 
-    def test_single_condition_number(self):
-        """Test finding indices with single numeric condition."""
-        from scitex_pd import find_indi
-
+    def test_single_numeric_condition_matches_expected_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 2], "B": ["a", "b", "c", "d"]})
-        conditions = {"A": 2}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 2})
+        # Assert
         assert result == [1, 3]
 
-    def test_multiple_conditions(self):
-        """Test finding indices with multiple conditions."""
-        from scitex_pd import find_indi
-
+    def test_multiple_conditions_apply_logical_and(self):
+        # Arrange
         df = pd.DataFrame(
-            {"A": [1, 2, 1, 2], "B": ["x", "x", "y", "y"], "C": [10, 20, 30, 40]}
+            {
+                "A": [1, 2, 1, 2],
+                "B": ["x", "x", "y", "y"],
+                "C": [10, 20, 30, 40],
+            }
         )
-        conditions = {"A": 1, "B": "x"}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 1, "B": "x"})
+        # Assert
         assert result == [0]
 
-    def test_list_condition(self):
-        """Test finding indices with list condition."""
-        from scitex_pd import find_indi
-
-        df = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]})
-        conditions = {"A": [1, 3, 5]}
-        result = find_indi(df, conditions)
-
+    def test_list_condition_matches_each_listed_value(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3, 4, 5], "B": ["a", "b", "c", "d", "e"]}
+        )
+        # Act
+        result = find_indi(df, {"A": [1, 3, 5]})
+        # Assert
         assert result == [0, 2, 4]
 
-    def test_mixed_conditions(self):
-        """Test finding indices with mixed single and list conditions."""
-        from scitex_pd import find_indi
-
+    def test_mixed_single_and_list_conditions_apply_intersection(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1, 2, 3, 1, 2],
@@ -70,196 +71,176 @@ class TestFindIndiBasic:
                 "C": [100, 200, 300, 400, 500],
             }
         )
-        conditions = {"A": [1, 2], "B": "x"}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": [1, 2], "B": "x"})
+        # Assert
         assert result == [0, 3]
 
 
 class TestFindIndiNaNHandling:
     """Test NaN handling in find_indi."""
 
-    def test_nan_in_dataframe(self):
-        """Test handling NaN values in DataFrame."""
-        from scitex_pd import find_indi
-
+    def test_nan_in_dataframe_skipped_when_not_in_condition(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, np.nan, 4], "B": ["x", "y", "z", "w"]})
-        conditions = {"A": 2}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 2})
+        # Assert
         assert result == [1]
 
-    def test_nan_in_condition_single(self):
-        """Test finding NaN values with single condition."""
-        from scitex_pd import find_indi
-
-        df = pd.DataFrame({"A": [1, np.nan, 3, np.nan], "B": ["a", "b", "c", "d"]})
-        conditions = {"A": np.nan}
-        result = find_indi(df, conditions)
-
+    def test_single_nan_condition_matches_nan_rows(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, np.nan, 3, np.nan], "B": ["a", "b", "c", "d"]}
+        )
+        # Act
+        result = find_indi(df, {"A": np.nan})
+        # Assert
         assert result == [1, 3]
 
-    def test_nan_in_condition_list(self):
-        """Test finding NaN values in list condition."""
-        from scitex_pd import find_indi
-
+    def test_nan_in_list_condition_matches_value_or_nan(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, np.nan, 3, 4, np.nan]})
-        conditions = {"A": [1, np.nan]}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": [1, np.nan]})
+        # Assert
         assert result == [0, 1, 4]
 
-    def test_none_in_condition(self):
-        """Test finding None values."""
-        from scitex_pd import find_indi
-
-        df = pd.DataFrame({"A": [1, None, 3, None], "B": ["a", "b", "c", "d"]})
-        conditions = {"A": None}
-        result = find_indi(df, conditions)
-
+    def test_none_in_condition_matches_none_rows(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, None, 3, None], "B": ["a", "b", "c", "d"]}
+        )
+        # Act
+        result = find_indi(df, {"A": None})
+        # Assert
         assert result == [1, 3]
 
-    def test_pd_na_in_condition(self):
-        """Test finding pd.NA values."""
-        from scitex_pd import find_indi
-
+    def test_pd_na_in_condition_matches_pd_na_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, pd.NA, 3, pd.NA]}, dtype="Int64")
-        conditions = {"A": pd.NA}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": pd.NA})
+        # Assert
         assert result == [1, 3]
 
 
 class TestFindIndiEdgeCases:
     """Test edge cases in find_indi."""
 
-    def test_empty_dataframe(self):
-        """Test with empty DataFrame."""
-        from scitex_pd import find_indi
-
+    def test_empty_dataframe_and_empty_conditions_return_empty_list(self):
+        # Arrange
         df = pd.DataFrame()
-        conditions = {}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {})
+        # Assert
         assert result == []
 
-    def test_empty_conditions(self):
-        """Test with empty conditions."""
-        from scitex_pd import find_indi
-
+    def test_empty_conditions_on_populated_dataframe_returns_empty_list(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
-        conditions = {}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {})
+        # Assert
         assert result == []
 
-    def test_no_matches(self):
-        """Test when no rows match conditions."""
-        from scitex_pd import find_indi
-
+    def test_no_matching_rows_returns_empty_list(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
-        conditions = {"A": 999}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 999})
+        # Assert
         assert result == []
 
-    def test_all_matches(self):
-        """Test when all rows match conditions."""
-        from scitex_pd import find_indi
-
+    def test_all_rows_match_returns_every_index(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 1, 1], "B": ["x", "x", "x"]})
-        conditions = {"A": 1, "B": "x"}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 1, "B": "x"})
+        # Assert
         assert result == [0, 1, 2]
 
-    def test_custom_index(self):
-        """Test with custom DataFrame index."""
-        from scitex_pd import find_indi
-
-        df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]}, index=[10, 20, 30])
-        conditions = {"A": 2}
-        result = find_indi(df, conditions)
-
+    def test_custom_index_returns_custom_label_for_match(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": [1, 2, 3], "B": ["x", "y", "z"]}, index=[10, 20, 30]
+        )
+        # Act
+        result = find_indi(df, {"A": 2})
+        # Assert
         assert result == [20]
 
 
 class TestFindIndiErrorHandling:
     """Test error handling in find_indi."""
 
-    def test_column_not_found(self):
-        """Test KeyError when column not in DataFrame."""
-        from scitex_pd import find_indi
-
+    def test_missing_column_raises_keyerror_with_columns_message(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "z"]})
         conditions = {"C": 1}
-
-        with pytest.raises(KeyError, match="Columns not found in DataFrame: \\['C'\\]"):
+        # Act
+        ctx = pytest.raises(
+            KeyError, match=r"Columns not found in DataFrame: \['C'\]"
+        )
+        # Assert
+        with ctx:
             find_indi(df, conditions)
 
-    def test_multiple_columns_not_found(self):
-        """Test KeyError with multiple missing columns."""
-        from scitex_pd import find_indi
-
+    def test_multiple_missing_columns_raises_keyerror(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3]})
         conditions = {"B": 1, "C": 2}
-
-        with pytest.raises(KeyError, match="Columns not found in DataFrame"):
+        # Act
+        ctx = pytest.raises(KeyError, match="Columns not found in DataFrame")
+        # Assert
+        with ctx:
             find_indi(df, conditions)
 
 
 class TestFindIndiDataTypes:
     """Test find_indi with various data types."""
 
-    def test_float_values(self):
-        """Test with float values."""
-        from scitex_pd import find_indi
-
+    def test_float_value_condition_matches_exact_equality(self):
+        # Arrange
         df = pd.DataFrame({"A": [1.1, 2.2, 3.3, 2.2]})
-        conditions = {"A": 2.2}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": 2.2})
+        # Assert
         assert result == [1, 3]
 
-    def test_boolean_values(self):
-        """Test with boolean values."""
-        from scitex_pd import find_indi
-
+    def test_boolean_value_condition_matches_true_rows(self):
+        # Arrange
         df = pd.DataFrame({"A": [True, False, True, False]})
-        conditions = {"A": True}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": True})
+        # Assert
         assert result == [0, 2]
 
-    def test_datetime_values(self):
-        """Test with datetime values."""
-        from scitex_pd import find_indi
-
+    def test_datetime_condition_matches_timestamp_rows(self):
+        # Arrange
         dates = pd.to_datetime(["2021-01-01", "2021-01-02", "2021-01-01"])
         df = pd.DataFrame({"date": dates})
-        conditions = {"date": pd.Timestamp("2021-01-01")}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"date": pd.Timestamp("2021-01-01")})
+        # Assert
         assert result == [0, 2]
 
-    def test_categorical_values(self):
-        """Test with categorical values."""
-        from scitex_pd import find_indi
-
-        df = pd.DataFrame({"A": pd.Categorical(["cat", "dog", "cat", "bird"])})
-        conditions = {"A": "cat"}
-        result = find_indi(df, conditions)
-
+    def test_categorical_value_condition_matches_category_rows(self):
+        # Arrange
+        df = pd.DataFrame(
+            {"A": pd.Categorical(["cat", "dog", "cat", "bird"])}
+        )
+        # Act
+        result = find_indi(df, {"A": "cat"})
+        # Assert
         assert result == [0, 2]
 
 
 class TestFindIndiComplexScenarios:
     """Test complex scenarios with find_indi."""
 
-    def test_multiple_columns_multiple_values(self):
-        """Test with multiple columns and multiple values."""
-        from scitex_pd import find_indi
-
+    def test_multi_column_multi_value_conditions_intersect_correctly(self):
+        # Arrange
         df = pd.DataFrame(
             {
                 "A": [1, 2, 3, 4, 5],
@@ -267,15 +248,14 @@ class TestFindIndiComplexScenarios:
                 "C": [10, 20, 30, 40, 50],
             }
         )
-        conditions = {"A": [1, 2, 3], "B": ["x", "y"]}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": [1, 2, 3], "B": ["x", "y"]})
+        # Assert
         assert result == [0, 1]
 
-    def test_large_dataframe(self):
-        """Test with large DataFrame."""
-        from scitex_pd import find_indi
-
+    def test_large_dataframe_result_matches_manual_filter(self):
+        # Arrange
+        np.random.seed(0)
         n = 10000
         df = pd.DataFrame(
             {
@@ -284,78 +264,64 @@ class TestFindIndiComplexScenarios:
                 "C": np.random.rand(n),
             }
         )
-        conditions = {"A": 5, "B": "x"}
-        result = find_indi(df, conditions)
-
-        # Verify result manually
         expected = df[(df["A"] == 5) & (df["B"] == "x")].index.tolist()
+        # Act
+        result = find_indi(df, {"A": 5, "B": "x"})
+        # Assert
         assert result == expected
 
-    def test_tuple_condition(self):
-        """Test with tuple condition (should work like list)."""
-        from scitex_pd import find_indi
-
+    def test_tuple_condition_behaves_like_list_condition(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3, 4, 5]})
-        conditions = {"A": (2, 4)}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": (2, 4)})
+        # Assert
         assert result == [1, 3]
 
-    def test_mixed_types_in_list(self):
-        """Test with mixed types in list condition."""
-        from scitex_pd import find_indi
-
+    def test_mixed_types_in_list_condition_match_each_typed_value(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, "2", 3, "4", 5]})
-        conditions = {"A": [1, "2", 3]}
-        result = find_indi(df, conditions)
-
+        # Act
+        result = find_indi(df, {"A": [1, "2", 3]})
+        # Assert
         assert result == [0, 1, 2]
 
 
 class TestFindIndiDocumentationExamples:
     """Test examples from documentation."""
 
-    def test_docstring_example(self):
-        """Test the example from the docstring."""
-        from scitex_pd import find_indi
-
+    def test_docstring_example_matches_documented_indices(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, None], "B": ["x", "y", "x"]})
-        conditions = {"A": [1, None], "B": "x"}
-        result = find_indi(df, conditions)
-
-        # Should find rows where A is 1 or None AND B is 'x'
+        # Act
+        result = find_indi(df, {"A": [1, None], "B": "x"})
+        # Assert
         assert result == [0, 2]
 
-    def test_original_commented_example(self):
-        """Test example from commented code."""
-        from scitex_pd import find_indi
-
+    def test_original_commented_example_matches_documented_indices(self):
+        # Arrange
         df = pd.DataFrame({"A": [1, 2, 3], "B": ["x", "y", "x"]})
-        conditions = {"A": [1, 2], "B": "x"}
-        result = find_indi(df, conditions)
-
-        # Should find rows where A is 1 or 2 AND B is 'x'
+        # Act
+        result = find_indi(df, {"A": [1, 2], "B": "x"})
+        # Assert
         assert result == [0]
-
 
 
 class TestFindIndiNaPaths:
     """NaN-in-list paths + TypeError fallback inside the list branch."""
 
-    def test_pd_na_in_list_treated_as_na_match(self):
-        from scitex_pd import find_indi
-
+    def test_pd_na_in_list_is_treated_as_na_match(self):
+        # Arrange
         df = pd.DataFrame({"A": pd.array([1, 2, pd.NA], dtype="Int64")})
-        idx = find_indi(df, {"A": [1, pd.NA]})
-        assert idx == [0, 2]
+        # Act
+        result = find_indi(df, {"A": [1, pd.NA]})
+        # Assert
+        assert result == [0, 2]
 
-    def test_typeerror_fallback_with_unhashable_eq(self):
-        from scitex_pd import find_indi
-
-        # An object whose __eq__ raises forces `None in value` to
-        # propagate TypeError, exercising the except branch. The
-        # fallback skips strings via `isinstance(v, str)` so surrounding
-        # strings are safely ignored.
+    def test_typeerror_in_eq_falls_back_to_isna_path(self):
+        # Arrange
+        # An object whose ``__eq__`` raises forces ``None in value`` to
+        # propagate ``TypeError``, exercising the except branch.
         class BadEq:
             def __eq__(self, other):
                 raise TypeError("boom")
@@ -364,147 +330,13 @@ class TestFindIndiNaPaths:
                 return id(self)
 
         df = pd.DataFrame({"A": ["x", "y", "z"]})
-        idx = find_indi(df, {"A": ["x", BadEq()]})
-        assert idx == [0]
+        # Act
+        result = find_indi(df, {"A": ["x", BadEq()]})
+        # Assert
+        assert result == [0]
 
 
 if __name__ == "__main__":
     import os
 
-    import pytest
-
     pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_find_indi.py
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-05 08:11:05 (ywatanabe)"
-# # File: ./scitex_repo/src/scitex/pd/_find_indi.py
-#
-# from typing import Dict, List, Union
-#
-# import pandas as pd
-#
-#
-# # def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]) -> pd.Series:
-# #     """Finds indices of rows that satisfy all given conditions in a DataFrame.
-#
-# #     Example
-# #     -------
-# #     >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': ['x', 'y', 'x']})
-# #     >>> conditions = {'A': [1, 2], 'B': 'x'}
-# #     >>> result = find_indi(df, conditions)
-# #     >>> print(result)
-# #     0     True
-# #     1    False
-# #     2    False
-# #     dtype: bool
-#
-# #     Parameters
-# #     ----------
-# #     df : pd.DataFrame
-# #         Input DataFrame to search in
-# #     conditions : Dict[str, Union[str, int, float, List]]
-# #         Dictionary of column names and their target values
-#
-# #     Returns
-# #     -------
-# #     pd.Series
-# #         Boolean Series indicating which rows satisfy all conditions
-#
-# #     Raises
-# #     ------
-# #     KeyError
-# #         If any column in conditions is not found in DataFrame
-# #     """
-# #     if not all(col in df.columns for col in conditions):
-# #         missing_cols = [col for col in conditions if col not in df.columns]
-# #         raise KeyError(f"Columns not found in DataFrame: {missing_cols}")
-#
-# #     condition_series = []
-# #     for key, value in conditions.items():
-# #         if isinstance(value, (list, tuple)):
-# #             condition_series.append(df[key].isin(value))
-# #         else:
-# #             condition_series.append(df[key] == value)
-#
-# #     return pd.concat(condition_series, axis=1).all(axis=1)
-#
-#
-# def find_indi(
-#     df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]
-# ) -> List[int]:
-#     """Finds indices of rows that satisfy conditions, handling NaN values.
-#
-#     Example
-#     -------
-#     >>> df = pd.DataFrame({'A': [1, 2, None], 'B': ['x', 'y', 'x']})
-#     >>> conditions = {'A': [1, None], 'B': 'x'}
-#     >>> result = find_indi(df, conditions)
-#
-#     Parameters
-#     ----------
-#     df : pd.DataFrame
-#         Input DataFrame
-#     conditions : Dict[str, Union[str, int, float, List]]
-#         Column conditions
-#
-#     Returns
-#     -------
-#     List[int]
-#         List of integer indices of matching rows
-#     """
-#     if not conditions:
-#         return []
-#
-#     if not all(col in df.columns for col in conditions):
-#         missing_cols = [col for col in conditions if col not in df.columns]
-#         raise KeyError(f"Columns not found in DataFrame: {missing_cols}")
-#
-#     condition_series = []
-#     for key, value in conditions.items():
-#         if isinstance(value, (list, tuple)):
-#             # Handle NaN in lists
-#             has_na = False
-#             try:
-#                 # Check for None
-#                 if None in value:
-#                     has_na = True
-#                 # Check for pd.NA (may raise TypeError)
-#                 elif any(v is pd.NA for v in value):
-#                     has_na = True
-#                 # Check for np.nan
-#                 elif any(pd.isna(v) for v in value):
-#                     has_na = True
-#             except (TypeError, ValueError):
-#                 # If any check fails, try alternative approach
-#                 has_na = any(
-#                     pd.isna(v) if not isinstance(v, str) else False for v in value
-#                 )
-#
-#             if has_na:
-#                 condition = df[key].isin(value) | df[key].isna()
-#             else:
-#                 condition = df[key].isin(value)
-#         else:
-#             # Handle single NaN value
-#             if pd.isna(value):
-#                 condition = df[key].isna()
-#             else:
-#                 condition = df[key] == value
-#         condition_series.append(condition)
-#
-#     if condition_series:
-#         mask = pd.concat(condition_series, axis=1).all(axis=1)
-#         return df.index[mask].tolist()
-#     else:
-#         return []
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_find_indi.py
-# --------------------------------------------------------------------------------

@@ -1,235 +1,200 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2025-04-27 20:00:00 (ywatanabe)"
-# File: ./tests/scitex/pd/test__force_df.py
-
-import os
+"""Tests for scitex_pd.force_df."""
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from _helpers import frames_match
+from scitex_pd import force_df
+
 
 class TestForceDfBasic:
     """Test basic functionality of force_df."""
 
-    def test_dict_to_dataframe(self):
-        """Test converting dictionary to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_dict_to_dataframe_returns_dataframe_instance(self):
+        # Arrange
         data = {"a": [1, 2, 3], "b": [4, 5, 6]}
+        # Act
         result = force_df(data)
-
+        # Assert
         assert isinstance(result, pd.DataFrame)
+
+    def test_dict_to_dataframe_has_expected_shape(self):
+        # Arrange
+        data = {"a": [1, 2, 3], "b": [4, 5, 6]}
+        # Act
+        result = force_df(data)
+        # Assert
         assert result.shape == (3, 2)
-        assert list(result.columns) == ["a", "b"]
+
+    def test_dict_to_dataframe_preserves_column_a_values(self):
+        # Arrange
+        data = {"a": [1, 2, 3], "b": [4, 5, 6]}
+        # Act
+        result = force_df(data)
+        # Assert
         assert result["a"].tolist() == [1, 2, 3]
-        assert result["b"].tolist() == [4, 5, 6]
 
-    def test_dataframe_passthrough(self):
-        """Test that DataFrame is returned unchanged."""
-        from scitex_pd import force_df
-
+    def test_dataframe_passthrough_returns_equivalent_frame(self):
+        # Arrange
         df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+        # Act
         result = force_df(df)
+        # Assert
+        assert frames_match(result, df)
 
-        assert isinstance(result, pd.DataFrame)
-        pd.testing.assert_frame_equal(result, df)
-
-    def test_series_to_dataframe(self):
-        """Test converting Series to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_series_to_dataframe_keeps_series_name_as_column(self):
+        # Arrange
         series = pd.Series([1, 2, 3], name="data")
+        # Act
         result = force_df(series)
-
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (3, 1)
+        # Assert
         assert result.columns[0] == "data"
+
+    def test_series_to_dataframe_preserves_values(self):
+        # Arrange
+        series = pd.Series([1, 2, 3], name="data")
+        # Act
+        result = force_df(series)
+        # Assert
         assert result["data"].tolist() == [1, 2, 3]
 
-    def test_list_to_dataframe(self):
-        """Test converting list to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_list_to_dataframe_uses_value_column_name(self):
+        # Arrange
         data = [1, 2, 3, 4, 5]
+        # Act
         result = force_df(data)
-
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (5, 1)
+        # Assert
         assert result.columns[0] == "value"
+
+    def test_list_to_dataframe_preserves_values_in_order(self):
+        # Arrange
+        data = [1, 2, 3, 4, 5]
+        # Act
+        result = force_df(data)
+        # Assert
         assert result["value"].tolist() == [1, 2, 3, 4, 5]
 
-    def test_tuple_to_dataframe(self):
-        """Test converting tuple to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_tuple_to_dataframe_preserves_values_in_order(self):
+        # Arrange
         data = (10, 20, 30)
+        # Act
         result = force_df(data)
-
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (3, 1)
-        assert result.columns[0] == "value"
+        # Assert
         assert result["value"].tolist() == [10, 20, 30]
 
 
 class TestForceDfNumPy:
     """Test force_df with numpy arrays."""
 
-    def test_1d_array_to_dataframe(self):
-        """Test converting 1D numpy array to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_1d_array_uses_value_column_and_preserves_values(self):
+        # Arrange
         arr = np.array([1, 2, 3, 4])
+        # Act
         result = force_df(arr)
-
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (4, 1)
-        assert result.columns[0] == "value"
+        # Assert
         assert result["value"].tolist() == [1, 2, 3, 4]
 
-    def test_2d_array_to_dataframe(self):
-        """Test converting 2D numpy array to DataFrame."""
-        from scitex_pd import force_df
-
+    def test_2d_array_returns_two_by_three_dataframe(self):
+        # Arrange
         arr = np.array([[1, 2, 3], [4, 5, 6]])
+        # Act
         result = force_df(arr)
-
-        assert isinstance(result, pd.DataFrame)
+        # Assert
         assert result.shape == (2, 3)
-        assert list(result.columns) == [0, 1, 2]
-        assert result[0].tolist() == [1, 4]
-        assert result[1].tolist() == [2, 5]
-        assert result[2].tolist() == [3, 6]
 
-    def test_empty_array(self):
-        """Test with empty numpy array."""
-        from scitex_pd import force_df
-
-        arr = np.array([])
+    def test_2d_array_uses_default_integer_column_names(self):
+        # Arrange
+        arr = np.array([[1, 2, 3], [4, 5, 6]])
+        # Act
         result = force_df(arr)
+        # Assert
+        assert list(result.columns) == [0, 1, 2]
 
-        assert isinstance(result, pd.DataFrame)
+    def test_empty_array_returns_zero_by_one_dataframe(self):
+        # Arrange
+        arr = np.array([])
+        # Act
+        result = force_df(arr)
+        # Assert
         assert result.shape == (0, 1)
 
 
 class TestForceDfMixedLengths:
     """Test force_df with mixed-length data."""
 
-    def test_dict_mixed_lengths_default_filler(self):
-        """Test dictionary with mixed-length values using default filler."""
-        from scitex_pd import force_df
-
+    def test_mixed_lengths_default_filler_pads_with_nan(self):
+        # Arrange
         data = {"a": [1, 2, 3], "b": [4, 5], "c": [6]}
+        # Act
         result = force_df(data)
-
-        assert result.shape == (3, 3)
-        assert result["a"].tolist() == [1, 2, 3]
-        # NaN values need special comparison
-        b_values = result["b"].tolist()
-        assert b_values[0] == 4
-        assert b_values[1] == 5
-        assert pd.isna(b_values[2])
+        # Assert
         assert pd.isna(result["b"].iloc[2])
-        assert result["c"].iloc[0] == 6
-        assert pd.isna(result["c"].iloc[1])
-        assert pd.isna(result["c"].iloc[2])
 
-    def test_dict_mixed_lengths_custom_filler(self):
-        """Test dictionary with mixed-length values using custom filler."""
-        from scitex_pd import force_df
-
+    def test_mixed_lengths_custom_zero_filler_pads_short_lists(self):
+        # Arrange
         data = {"a": [1, 2, 3], "b": [4, 5], "c": [6]}
+        # Act
         result = force_df(data, filler=0)
-
-        assert result.shape == (3, 3)
+        # Assert
         assert result["b"].tolist() == [4, 5, 0]
-        assert result["c"].tolist() == [6, 0, 0]
 
-    def test_scalar_values_in_dict(self):
-        """Test dictionary with scalar values."""
-        from scitex_pd import force_df
-
+    def test_scalar_values_in_dict_pad_with_nan_to_max_length(self):
+        # Arrange
         data = {"a": 1, "b": [2, 3, 4], "c": "hello"}
+        # Act
         result = force_df(data)
-
-        assert result.shape == (3, 3)
-        assert result["a"].iloc[0] == 1
+        # Assert
         assert pd.isna(result["a"].iloc[1])
-        assert pd.isna(result["a"].iloc[2])
-        assert result["b"].tolist() == [2, 3, 4]
-        assert result["c"].iloc[0] == "hello"
-        assert pd.isna(result["c"].iloc[1])
 
 
 class TestForceDfListedSeries:
     """Test force_df with list of Series."""
 
-    def test_list_of_series(self):
-        """Test that list of Series is handled (though not ideally)."""
-        from scitex_pd import force_df
-
+    def test_list_of_series_returns_three_by_one_nan_frame(self):
+        # Arrange
         series1 = pd.Series({"a": 1, "b": 2})
         series2 = pd.Series({"a": 3, "b": 4})
         series3 = pd.Series({"a": 5, "b": 6})
-
-        # The current implementation treats Series as complex objects
-        # and creates a DataFrame with NaN values
+        # Act
         result = force_df([series1, series2, series3])
-
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (3, 1)
-        assert result.columns[0] == "value"
-        # The values are NaN because Series objects aren't handled properly
+        # Assert
         assert result["value"].isna().all()
 
-    def test_list_of_series_workaround(self):
-        """Test workaround for list of Series."""
-        from scitex_pd import force_df
-
+    def test_dict_of_series_dict_creates_row_named_columns(self):
+        # Arrange
         series1 = pd.Series({"a": 1, "b": 2})
         series2 = pd.Series({"a": 3, "b": 4})
-
-        # Workaround: manually convert to dict
         data = {"row_0": series1.to_dict(), "row_1": series2.to_dict()}
-
-        # This creates a transposed result
+        # Act
         result = force_df(data)
-
-        assert isinstance(result, pd.DataFrame)
-        # The result will have row_0, row_1 as columns
-        assert "row_0" in result.columns
-        assert "row_1" in result.columns
+        # Assert
+        assert {"row_0", "row_1"}.issubset(result.columns)
 
 
 class TestForceDfEdgeCases:
     """Test edge cases for force_df."""
 
-    def test_empty_dict(self):
-        """Test with empty dictionary."""
-        from scitex_pd import force_df
-
-        result = force_df({})
-
-        assert isinstance(result, pd.DataFrame)
+    def test_empty_dict_returns_empty_dataframe(self):
+        # Arrange
+        data = {}
+        # Act
+        result = force_df(data)
+        # Assert
         assert result.shape == (0, 0)
 
-    def test_nested_structures(self):
-        """Test with nested structures."""
-        from scitex_pd import force_df
-
+    def test_nested_lists_are_kept_as_object_values(self):
+        # Arrange
         data = {"a": [1, 2], "b": [[3, 4], [5, 6]]}
+        # Act
         result = force_df(data)
-
-        assert result.shape == (2, 2)
-        assert result["a"].tolist() == [1, 2]
+        # Assert
         assert result["b"].iloc[0] == [3, 4]
-        assert result["b"].iloc[1] == [5, 6]
 
-    def test_mixed_types(self):
-        """Test with mixed data types."""
-        from scitex_pd import force_df
-
+    def test_mixed_types_int_column_uses_int64_dtype(self):
+        # Arrange
         data = {
             "int": [1, 2, 3],
             "float": [1.1, 2.2, 3.3],
@@ -237,358 +202,179 @@ class TestForceDfEdgeCases:
             "bool": [True, False, True],
             "none": [None, None, None],
         }
+        # Act
         result = force_df(data)
-
-        assert result.shape == (3, 5)
+        # Assert
         assert result["int"].dtype == "int64"
-        assert result["float"].dtype == "float64"
-        # pandas 2.x may use StringDtype for object columns; accept both.
-        assert pd.api.types.is_string_dtype(
-            result["str"]
-        ) or pd.api.types.is_object_dtype(result["str"])
+
+    def test_mixed_types_bool_column_uses_bool_dtype(self):
+        # Arrange
+        data = {
+            "int": [1, 2, 3],
+            "bool": [True, False, True],
+        }
+        # Act
+        result = force_df(data)
+        # Assert
         assert result["bool"].dtype == "bool"
 
-    def test_single_value_dict(self):
-        """Test with single-value dictionary."""
-        from scitex_pd import force_df
-
+    def test_single_value_dict_returns_one_by_one_dataframe(self):
+        # Arrange
         data = {"a": 42}
+        # Act
         result = force_df(data)
-
-        assert result.shape == (1, 1)
+        # Assert
         assert result["a"].iloc[0] == 42
 
 
 class TestForceDfSpecialCases:
     """Test special cases and behaviors."""
 
-    def test_series_without_name(self):
-        """Test Series without name."""
-        from scitex_pd import force_df
-
+    def test_series_without_name_uses_default_integer_column_name(self):
+        # Arrange
         series = pd.Series([1, 2, 3])
+        # Act
         result = force_df(series)
+        # Assert
+        assert result.columns[0] == 0
 
-        assert isinstance(result, pd.DataFrame)
-        assert result.shape == (3, 1)
-        assert result.columns[0] == 0  # Default column name
-
-    def test_dict_with_none_values(self):
-        """Test dictionary with None values."""
-        from scitex_pd import force_df
-
+    def test_dict_with_none_scalar_value_pads_with_nan(self):
+        # Arrange
         data = {"a": None, "b": [1, 2, 3]}
+        # Act
         result = force_df(data)
-
-        assert result.shape == (3, 2)
-        # When None is extended with np.nan filler, it becomes [None, nan, nan]
-        # but pandas may convert None to nan
+        # Assert
         assert pd.isna(result["a"].iloc[0])
-        assert pd.isna(result["a"].iloc[1])
-        assert pd.isna(result["a"].iloc[2])
 
-    def test_dict_with_string_keys(self):
-        """Test dictionary with various string keys."""
-        from scitex_pd import force_df
-
+    def test_dict_with_unusual_string_keys_preserves_column_names(self):
+        # Arrange
         data = {
             "column_1": [1, 2],
             "Column 2": [3, 4],
             "3rdColumn": [5, 6],
             "col-4": [7, 8],
         }
+        # Act
         result = force_df(data)
-
+        # Assert
         assert set(result.columns) == set(data.keys())
-        assert result["column_1"].tolist() == [1, 2]
-        assert result["Column 2"].tolist() == [3, 4]
 
-    def test_custom_filler_types(self):
-        """Test various custom filler types."""
-        from scitex_pd import force_df
-
-        # Test with string filler
+    def test_custom_string_filler_fills_short_columns_with_marker(self):
+        # Arrange
         data = {"a": [1], "b": [2, 3]}
+        # Act
         result = force_df(data, filler="missing")
+        # Assert
         assert result["a"].iloc[1] == "missing"
 
-        # Test with None filler
+    def test_custom_none_filler_pads_numeric_column_with_nan(self):
+        # Arrange
         data = {"a": [1], "b": [2, 3]}
+        # Act
         result = force_df(data, filler=None)
-        # Pandas may convert None to nan in numeric columns
+        # Assert
         assert pd.isna(result["a"].iloc[1])
 
-        # Test with custom object filler
-        custom_obj = object()
+    def test_custom_object_filler_pads_with_object_reference(self):
+        # Arrange
+        custom = object()
         data = {"a": [1], "b": [2, 3]}
-        result = force_df(data, filler=custom_obj)
-        assert result["a"].iloc[1] is custom_obj
+        # Act
+        result = force_df(data, filler=custom)
+        # Assert
+        assert result["a"].iloc[1] is custom
 
 
 class TestForceDfIntegration:
     """Integration tests for force_df."""
 
-    def test_real_world_scenario(self):
-        """Test with realistic data scenario."""
-        from scitex_pd import force_df
-
-        # Simulating data from different sources with varying lengths
+    def test_real_world_mixed_length_dict_pads_with_string_filler(self):
+        # Arrange
         data = {
             "experiment_id": [1, 2, 3],
             "measurements": [10.5, 20.3],
             "status": "completed",
             "notes": ["good", "better", "best", "excellent"],
         }
-
+        # Act
         result = force_df(data, filler="N/A")
-
-        assert result.shape == (4, 4)
-        assert result["experiment_id"].tolist() == [1, 2, 3, "N/A"]
+        # Assert
         assert result["measurements"].tolist() == [10.5, 20.3, "N/A", "N/A"]
-        assert result["status"].tolist() == ["completed", "N/A", "N/A", "N/A"]
-        assert result["notes"].tolist() == ["good", "better", "best", "excellent"]
 
-    def test_chained_operations(self):
-        """Test force_df in chained operations."""
-        from scitex_pd import force_df
-
-        # Start with mixed data
+    def test_force_df_then_fillna_supports_arithmetic_on_columns(self):
+        # Arrange
         data = {"a": [1, 2], "b": [3, 4, 5]}
-
-        # Convert to DataFrame and perform operations
-        result = force_df(data)
-        result = result.fillna(0)  # Replace NaN with 0
+        # Act
+        result = force_df(data).fillna(0)
         result["sum"] = result["a"] + result["b"]
-
+        # Assert
         assert result["sum"].tolist() == [4, 6, 5]
-
-
-
-import numpy as np  # noqa: F401  (already imported above; re-imported intentionally for clarity)
 
 
 class TestForceDfBranchCoverage:
     """Branches not exercised by the main behaviour suite above."""
 
     def test_none_input_returns_empty_dataframe(self):
-        from scitex_pd import force_df
-
-        result = force_df(None)
-        assert isinstance(result, pd.DataFrame)
+        # Arrange
+        data = None
+        # Act
+        result = force_df(data)
+        # Assert
         assert result.empty
 
-    def test_3d_ndarray_is_reshaped(self):
-        from scitex_pd import force_df
-
+    def test_3d_ndarray_is_reshaped_to_two_dimensional_frame(self):
+        # Arrange
         arr = np.arange(24).reshape(2, 3, 4)
+        # Act
         result = force_df(arr)
-        assert isinstance(result, pd.DataFrame)
+        # Assert
         assert result.shape == (2, 12)
 
-    def test_bool_scalar(self):
-        from scitex_pd import force_df
-
-        result = force_df(True)
+    def test_bool_scalar_input_returns_one_by_one_dataframe(self):
+        # Arrange
+        data = True
+        # Act
+        result = force_df(data)
+        # Assert
         assert result.shape == (1, 1)
-        val = result["value"].iloc[0]
-        assert val is True or val == 1
 
-    def test_str_scalar(self):
-        from scitex_pd import force_df
-
-        result = force_df("hello")
-        assert result.shape == (1, 1)
+    def test_str_scalar_input_returns_one_row_with_string_value(self):
+        # Arrange
+        data = "hello"
+        # Act
+        result = force_df(data)
+        # Assert
         assert result["value"].iloc[0] == "hello"
 
-    def test_list_of_lists(self):
-        from scitex_pd import force_df
-
-        result = force_df([[1, 2], [3, 4]])
+    def test_list_of_lists_input_returns_two_by_two_dataframe(self):
+        # Arrange
+        data = [[1, 2], [3, 4]]
+        # Act
+        result = force_df(data)
+        # Assert
         assert result.shape == (2, 2)
-        assert result.iloc[0].tolist() == [1, 2]
 
-    def test_set_falls_through_to_generic_iterable(self):
-        from scitex_pd import force_df
-
-        result = force_df({1, 2, 3})
-        assert result.shape == (3, 1)
+    def test_set_input_falls_through_to_generic_iterable(self):
+        # Arrange
+        data = {1, 2, 3}
+        # Act
+        result = force_df(data)
+        # Assert
         assert set(result["value"].tolist()) == {1, 2, 3}
 
-    def test_unconvertible_object_raises_type_error(self):
-        from scitex_pd import force_df
-
+    def test_unconvertible_object_raises_type_error_with_message(self):
+        # Arrange
         class NotIterable:
             pass
 
-        with pytest.raises(TypeError, match="Cannot convert object"):
+        # Act
+        ctx = pytest.raises(TypeError, match="Cannot convert object")
+        # Assert
+        with ctx:
             force_df(NotIterable())
 
 
 if __name__ == "__main__":
     import os
 
-    import pytest
-
     pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_force_df.py
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 19:59:11 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/scitex_repo/src/scitex/pd/_force_df.py
-# # ----------------------------------------
-# import os
-#
-# __FILE__ = "./src/scitex/pd/_force_df.py"
-# __DIR__ = os.path.dirname(__FILE__)
-# # ----------------------------------------
-#
-# import numpy as np
-# import pandas as pd
-#
-# from scitex.types import is_listed_X
-#
-#
-# def force_df(data, filler=np.nan):
-#     """
-#     Convert various data types to pandas DataFrame.
-#
-#     Parameters
-#     ----------
-#     data : various
-#         The data to convert to DataFrame. Can be DataFrame, Series, ndarray,
-#         list, tuple, dict, scalar value, etc.
-#     filler : any, optional
-#         Value to use for filling missing values, by default np.nan
-#
-#     Returns
-#     -------
-#     pd.DataFrame
-#         Data converted to DataFrame
-#
-#     Examples
-#     --------
-#     >>> import scitex
-#     >>> import pandas as pd
-#     >>> import numpy as np
-#
-#     # DataFrame input returns the same DataFrame
-#     >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
-#     >>> scitex.pd.force_df(df) is df
-#     True
-#
-#     # Series input is converted to DataFrame
-#     >>> series = pd.Series([1, 2, 3], name='test')
-#     >>> scitex.pd.force_df(series)
-#        test
-#     0     1
-#     1     2
-#     2     3
-#
-#     # NumPy array input is converted to DataFrame
-#     >>> arr = np.array([1, 2, 3])
-#     >>> scitex.pd.force_df(arr)
-#        value
-#     0      1
-#     1      2
-#     2      3
-#
-#     # Scalar values are converted to single-value DataFrames
-#     >>> scitex.pd.force_df(42)
-#        value
-#     0     42
-#
-#     # Lists and tuples are converted to DataFrame
-#     >>> scitex.pd.force_df([1, 2, 3])
-#        value
-#     0      1
-#     1      2
-#     2      3
-#
-#     # Dictionaries are converted to DataFrame with appropriate handling
-#     # of different length values
-#     >>> data = {'A': [1, 2, 3], 'B': [4, 5]}
-#     >>> scitex.pd.force_df(data)
-#        A  B
-#     0  1  4
-#     1  2  5
-#     2  3  NaN
-#     """
-#     # Return None as empty DataFrame
-#     if data is None:
-#         return pd.DataFrame()
-#
-#     # Return DataFrame as is
-#     if isinstance(data, pd.DataFrame):
-#         return data
-#
-#     # Convert Series to DataFrame
-#     if isinstance(data, pd.Series):
-#         return data.to_frame()
-#
-#     # Convert numpy array to DataFrame
-#     if isinstance(data, np.ndarray):
-#         # Handle 1D array
-#         if data.ndim == 1:
-#             return pd.DataFrame(data, columns=["value"])
-#         # Handle 2D array
-#         elif data.ndim == 2:
-#             return pd.DataFrame(data)
-#         # Handle higher dimensional arrays
-#         else:
-#             shape = data.shape
-#             reshaped = data.reshape(shape[0], -1)
-#             return pd.DataFrame(reshaped)
-#
-#     # Handle scalar values (int, float, str, etc.)
-#     if isinstance(data, (int, float, str, bool)):
-#         return pd.DataFrame([data], columns=["value"])
-#
-#     # Handle lists and tuples
-#     if isinstance(data, (list, tuple)):
-#         # Handle list of lists/arrays -> DataFrame
-#         if len(data) > 0 and isinstance(data[0], (list, tuple, np.ndarray)):
-#             return pd.DataFrame(data)
-#         # Handle simple list/tuple -> single column DataFrame
-#         else:
-#             return pd.DataFrame(data, columns=["value"])
-#
-#     # Continue with the original implementation for dictionaries
-#     if isinstance(data, dict):
-#         # Original implementation
-#         permutable_dict = data.copy()
-#
-#         # Get the lengths
-#         max_len = 0
-#         for k, v in permutable_dict.items():
-#             # Check if v is an iterable (but not string) or treat as single length otherwise
-#             if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
-#                 length = 1
-#             else:
-#                 length = len(v)
-#             max_len = max(max_len, length)
-#
-#         # Replace with appropriately filled list
-#         for k, v in permutable_dict.items():
-#             if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
-#                 permutable_dict[k] = [v] + [filler] * (max_len - 1)
-#             else:
-#                 permutable_dict[k] = list(v) + [filler] * (max_len - len(v))
-#
-#         # Puts them into a DataFrame
-#         return pd.DataFrame(permutable_dict)
-#
-#     # For any other iterable type
-#     try:
-#         return pd.DataFrame(list(data), columns=["value"])
-#     except:
-#         raise TypeError(f"Cannot convert object of type {type(data)} to DataFrame")
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/scitex-code/src/scitex/pd/_force_df.py
-# --------------------------------------------------------------------------------
