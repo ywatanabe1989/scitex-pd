@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scitex-pd"
-version = "0.1.3"
+version = "0.1.4"
 description = "Pandas helpers (force_df, melt_cols, find_pval, mv, slice, sort, round, …) — standalone module from the SciTeX ecosystem"
 readme = "README.md"
 license = "AGPL-3.0-only"
