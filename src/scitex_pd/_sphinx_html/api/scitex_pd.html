@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>scitex_pd &mdash; scitex-pd 0.1.2 documentation</title>
+  <title>scitex_pd &mdash; scitex-pd 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../_static/documentation_options.js?v=fd825880"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,6 +50,9 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_pd</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#functionalities">Functionalities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#io">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_pd.find_indi"><code class="docutils literal notranslate"><span class="pre">find_indi()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_pd.find_pval"><code class="docutils literal notranslate"><span class="pre">find_pval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_pd.force_df"><code class="docutils literal notranslate"><span class="pre">force_df()</span></code></a></li>
@@ -100,7 +103,48 @@
              
   <section id="module-scitex_pd">
 <span id="scitex-pd"></span><h1>scitex_pd<a class="headerlink" href="#module-scitex_pd" title="Link to this heading"></a></h1>
-<p>scitex-pd — pandas helpers (force_df, melt_cols, find_pval, mv, etc) — standalone.</p>
+<p>scitex-pd — pandas helpers extracted from the SciTeX ecosystem.</p>
+<section id="functionalities">
+<h2>Functionalities<a class="headerlink" href="#functionalities" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>force_df(x)</cite> — coerce dict / Series / list / scalar / ndarray
+into a <cite>pandas.DataFrame</cite> with sensible defaults.</p></li>
+<li><p><cite>from_xyz(df, x, y, z)</cite> / <cite>to_xy(df)</cite> / <cite>to_xyz(df)</cite> — long ↔ wide
+pivots; <cite>to_numeric(df)</cite> — column-wise numeric coercion.</p></li>
+<li><p><cite>find_pval(df)</cite> / <cite>_find_pval_col</cite> — locate p-value columns by name.</p></li>
+<li><p><cite>find_indi(df, mask)</cite> / <cite>get_unique(df, col)</cite> — boolean-mask and
+unique-values inspection helpers.</p></li>
+<li><p><cite>merge_columns</cite> / <cite>merge_cols</cite>, <cite>melt_cols</cite>, <cite>mv</cite> /
+<cite>mv_to_first</cite> / <cite>mv_to_last</cite> — column combine / reshape / reorder.</p></li>
+<li><p><cite>replace(df, mapping)</cite>, <cite>round(df, ndigits)</cite>, <cite>slice(df, …)</cite>,
+<cite>sort(df, …)</cite> — uniform DataFrame-in / DataFrame-out transforms.</p></li>
+<li><p><cite>ignore_setting_with_copy_warning()</cite> — context-manager for the
+pandas SettingWithCopyWarning.</p></li>
+</ul>
+</section>
+<section id="io">
+<h2>IO<a class="headerlink" href="#io" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Reads: <cite>pandas.DataFrame</cite>, <cite>pandas.Series</cite>, <cite>numpy.ndarray</cite>, dict,
+list, scalar inputs.</p></li>
+<li><p>Writes: nothing — all functions return new pandas objects; original
+inputs are not mutated.</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Hard: <cite>pandas</cite>, <cite>numpy</cite>, <cite>scitex-types</cite> (for <cite>is_listed_X</cite>).</p></li>
+</ul>
+<p>Standalone import:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scitex_pd</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd_</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd_</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">pvals</span> <span class="o">=</span> <span class="n">pd_</span><span class="o">.</span><span class="n">find_pval</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The umbrella <cite>scitex.pd</cite> import path is preserved via a
+<cite>sys.modules</cite>-alias bridge in <cite>scitex-python</cite>.</p>
+</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="scitex_pd.find_indi">
 <span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">find_indi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_find_indi.html#find_indi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.find_indi" title="Link to this definition"></a></dt>

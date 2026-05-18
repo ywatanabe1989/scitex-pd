@@ -6,15 +6,23 @@ after upgrading scitex-dev to refresh any pin in [dev].
 
 import shutil
 
-import pytest
 
-
-def test_audit_all_clean():
+def _require_scitex_dev_or_skip():
     if shutil.which("scitex-dev") is None:
+        import pytest
+
         pytest.skip(
             "scitex-dev not installed — add `scitex-dev[cli-audit]` "
             "to [project.optional-dependencies.dev]"
         )
+
+
+def test_audit_all_clean_for_scitex_pd_package():
+    # Arrange
+    _require_scitex_dev_or_skip()
     from scitex_dev.testing import audit_all_for_package
 
-    audit_all_for_package('scitex-pd')
+    # Act
+    result = audit_all_for_package('scitex-pd')
+    # Assert
+    assert result is None
