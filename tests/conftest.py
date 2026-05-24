@@ -5,6 +5,7 @@ already set ``COVERAGE_FILE`` to a tmp dir by the time conftest is loaded.
 
 See ``scitex_dev._skills.general.05_development_06_subprocess-coverage``.
 """
+
 from __future__ import annotations
 
 import os
@@ -35,18 +36,12 @@ def _ensure_subprocess_coverage_shim() -> None:
 _ensure_subprocess_coverage_shim()
 
 
-# ===== existing conftest content below =====
-"""Pytest fixtures and rootdir marker for this package.
-
-An empty conftest.py at tests/ is the canonical SciTeX
-convention (audit-project PS208) — it pins the pytest
-rootdir and gives downstream fixtures a home.
-"""
-
-from __future__ import annotations
+# ===== Pytest fixtures and rootdir marker for this package =====
+# An empty conftest.py at tests/ is the canonical SciTeX convention
+# (audit-project PS208) — it pins the pytest rootdir and gives
+# downstream fixtures a home.
 
 import sys
-from pathlib import Path
 
 # Make `_helpers` importable from every test file under tests/.
 _TESTS_DIR = Path(__file__).resolve().parent
