@@ -32,7 +32,7 @@ def find_pval(
     """
     Find p-value column name(s) or key(s) in various data structures.
 
-    Example:
+    Examples
     --------
     >>> df = pd.DataFrame({'p_value': [0.05, 0.01], 'pval': [0.1, 0.001], 'other': [1, 2]})
     >>> find_pval(df)
@@ -40,15 +40,15 @@ def find_pval(
     >>> find_pval(df, multiple=False)
     'p_value'
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     data : Union[pd.DataFrame, np.ndarray, List, Dict]
         Data structure to search for p-value column or key
     multiple : bool, optional
         If True, return all matches; if False, return only the first match (default is True)
 
-    Returns:
-    --------
+    Returns
+    -------
     Union[Optional[str], List[str]]
         Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found
     """
@@ -84,7 +84,7 @@ def _find_pval_col(
     """
     Find p-value column name(s) in a DataFrame.
 
-    Example:
+    Examples
     --------
     >>> df = pd.DataFrame({'p_value': [0.05, 0.01], 'pval': [0.1, 0.001], 'other': [1, 2]})
     >>> find_pval_col(df)
@@ -92,15 +92,15 @@ def _find_pval_col(
     >>> find_pval_col(df, multiple=False)
     'p_value'
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     df : pd.DataFrame
         DataFrame to search for p-value column(s)
     multiple : bool, optional
         If True, return all matches; if False, return only the first match (default is False)
 
-    Returns:
-    --------
+    Returns
+    -------
     Union[Optional[str], List[str]]
         Name(s) of the column(s) that match p-value patterns, or None if not found
     """

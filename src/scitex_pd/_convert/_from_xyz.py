@@ -11,17 +11,17 @@ def from_xyz(data_frame, x=None, y=None, z=None, square=False):
     """
     Convert a DataFrame with 'x', 'y', 'z' format into a heatmap DataFrame.
 
-    Example
-    -------
-    import pandas as pd
-    data = pd.DataFrame({
-        'col1': ['A', 'B', 'C', 'A'],
-        'col2': ['X', 'Y', 'Z', 'Y'],
-        'p_val': [0.01, 0.05, 0.001, 0.1]
-    })
-    data = data.rename(columns={"col1": "x", "col2": "y", "p_val": "z"})
-    result = from_xyz(data)
-    print(result)
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> data = pd.DataFrame({
+    ...     'col1': ['A', 'B', 'C', 'A'],
+    ...     'col2': ['X', 'Y', 'Z', 'Y'],
+    ...     'p_val': [0.01, 0.05, 0.001, 0.1]
+    ... })
+    >>> data = data.rename(columns={"col1": "x", "col2": "y", "p_val": "z"})
+    >>> result = from_xyz(data)
+    >>> print(result)
 
     Parameters
     ----------
