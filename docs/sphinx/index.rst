@@ -1,7 +1,7 @@
 scitex-pd
 =============
 
-Small linear-algebra helpers (distance, geometric median, cosine, nannorm)
+Pandas helpers (force_df, from_xyz, to_xy, find_pval, mv, slice, sort, round, ...)
 extracted from the SciTeX ecosystem as a standalone package.
 
 .. toctree::

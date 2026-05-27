@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 
 
-
 def force_df(data, filler=np.nan):
     """
     Convert various data types to pandas DataFrame.
@@ -36,42 +35,29 @@ def force_df(data, filler=np.nan):
     >>> import scitex
     >>> import pandas as pd
     >>> import numpy as np
-
-    # DataFrame input returns the same DataFrame
     >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
     >>> scitex.pd.force_df(df) is df
     True
-
-    # Series input is converted to DataFrame
     >>> series = pd.Series([1, 2, 3], name='test')
     >>> scitex.pd.force_df(series)
        test
     0     1
     1     2
     2     3
-
-    # NumPy array input is converted to DataFrame
     >>> arr = np.array([1, 2, 3])
     >>> scitex.pd.force_df(arr)
        value
     0      1
     1      2
     2      3
-
-    # Scalar values are converted to single-value DataFrames
     >>> scitex.pd.force_df(42)
        value
     0     42
-
-    # Lists and tuples are converted to DataFrame
     >>> scitex.pd.force_df([1, 2, 3])
        value
     0      1
     1      2
     2      3
-
-    # Dictionaries are converted to DataFrame with appropriate handling
-    # of different length values
     >>> data = {'A': [1, 2, 3], 'B': [4, 5]}
     >>> scitex.pd.force_df(data)
        A  B
