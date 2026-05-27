@@ -111,7 +111,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find p-value column name(s) or key(s) in various data structures.</span>
 
-<span class="sd">    Example:</span>
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; df = pd.DataFrame({&#39;p_value&#39;: [0.05, 0.01], &#39;pval&#39;: [0.1, 0.001], &#39;other&#39;: [1, 2]})</span>
 <span class="sd">    &gt;&gt;&gt; find_pval(df)</span>
@@ -119,15 +119,15 @@
 <span class="sd">    &gt;&gt;&gt; find_pval(df, multiple=False)</span>
 <span class="sd">    &#39;p_value&#39;</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    data : Union[pd.DataFrame, np.ndarray, List, Dict]</span>
 <span class="sd">        Data structure to search for p-value column or key</span>
 <span class="sd">    multiple : bool, optional</span>
 <span class="sd">        If True, return all matches; if False, return only the first match (default is True)</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    Union[Optional[str], List[str]]</span>
 <span class="sd">        Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -164,7 +164,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find p-value column name(s) in a DataFrame.</span>
 
-<span class="sd">    Example:</span>
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; df = pd.DataFrame({&#39;p_value&#39;: [0.05, 0.01], &#39;pval&#39;: [0.1, 0.001], &#39;other&#39;: [1, 2]})</span>
 <span class="sd">    &gt;&gt;&gt; find_pval_col(df)</span>
@@ -172,15 +172,15 @@
 <span class="sd">    &gt;&gt;&gt; find_pval_col(df, multiple=False)</span>
 <span class="sd">    &#39;p_value&#39;</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    df : pd.DataFrame</span>
 <span class="sd">        DataFrame to search for p-value column(s)</span>
 <span class="sd">    multiple : bool, optional</span>
 <span class="sd">        If True, return all matches; if False, return only the first match (default is False)</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    Union[Optional[str], List[str]]</span>
 <span class="sd">        Name(s) of the column(s) that match p-value patterns, or None if not found</span>
 <span class="sd">    &quot;&quot;&quot;</span>

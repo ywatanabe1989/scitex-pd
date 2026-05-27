@@ -175,13 +175,7 @@ inputs are not mutated.</p></li>
 <dt class="sig sig-object py" id="scitex_pd.find_pval">
 <span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">find_pval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_find_pval.html#find_pval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.find_pval" title="Link to this definition"></a></dt>
 <dd><p>Find p-value column name(s) or key(s) in various data structures.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span></p>
-</dd>
-</dl>
-<section id="example">
-<h2>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;p_value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span> <span class="s1">&#39;pval&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">find_pval</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="go">[&#39;p_value&#39;, &#39;pval&#39;]</span>
@@ -189,24 +183,20 @@ inputs are not mutated.</p></li>
 <span class="go">&#39;p_value&#39;</span>
 </pre></div>
 </div>
-</section>
-<section id="parameters">
-<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>data<span class="classifier">Union[pd.DataFrame, np.ndarray, List, Dict]</span></dt><dd><p>Data structure to search for p-value column or key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><em>np.ndarray</em><em>, </em><em>List</em><em>, </em><em>Dict</em><em>]</em>) – Data structure to search for p-value column or key</p></li>
+<li><p><strong>multiple</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return all matches; if False, return only the first match (default is True)</p></li>
+</ul>
 </dd>
-<dt>multiple<span class="classifier">bool, optional</span></dt><dd><p>If True, return all matches; if False, return only the first match (default is True)</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>], List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]]</p>
 </dd>
 </dl>
-</section>
-<section id="returns">
-<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
-<p>:
-Union[Optional[str], List[str]]</p>
-<blockquote>
-<div><p>Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found</p>
-</div></blockquote>
-</section>
 </dd></dl>
 
 <dl class="py function">
@@ -232,72 +222,55 @@ list, tuple, dict, scalar value, etc.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="ow">is</span> <span class="n">df</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+<span class="go">   test</span>
+<span class="go">0     1</span>
+<span class="go">1     2</span>
+<span class="go">2     3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="go">   value</span>
+<span class="go">0      1</span>
+<span class="go">1      2</span>
+<span class="go">2      3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="go">   value</span>
+<span class="go">0     42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">   value</span>
+<span class="go">0      1</span>
+<span class="go">1      2</span>
+<span class="go">2      3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scitex</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">force_df</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  4</span>
+<span class="go">1  2  5</span>
+<span class="go">2  3  NaN</span>
 </pre></div>
 </div>
-<p># DataFrame input returns the same DataFrame
-&gt;&gt;&gt; df = pd.DataFrame({‘A’: [1, 2, 3], ‘B’: [4, 5, 6]})
-&gt;&gt;&gt; scitex.pd.force_df(df) is df
-True</p>
-<p># Series input is converted to DataFrame
-&gt;&gt;&gt; series = pd.Series([1, 2, 3], name=’test’)
-&gt;&gt;&gt; scitex.pd.force_df(series)</p>
-<blockquote>
-<div><p>test</p>
-</div></blockquote>
-<p>0     1
-1     2
-2     3</p>
-<p># NumPy array input is converted to DataFrame
-&gt;&gt;&gt; arr = np.array([1, 2, 3])
-&gt;&gt;&gt; scitex.pd.force_df(arr)</p>
-<blockquote>
-<div><p>value</p>
-</div></blockquote>
-<p>0      1
-1      2
-2      3</p>
-<p># Scalar values are converted to single-value DataFrames
-&gt;&gt;&gt; scitex.pd.force_df(42)</p>
-<blockquote>
-<div><p>value</p>
-</div></blockquote>
-<p>0     42</p>
-<p># Lists and tuples are converted to DataFrame
-&gt;&gt;&gt; scitex.pd.force_df([1, 2, 3])</p>
-<blockquote>
-<div><p>value</p>
-</div></blockquote>
-<p>0      1
-1      2
-2      3</p>
-<p># Dictionaries are converted to DataFrame with appropriate handling
-# of different length values
-&gt;&gt;&gt; data = {‘A’: [1, 2, 3], ‘B’: [4, 5]}
-&gt;&gt;&gt; scitex.pd.force_df(data)</p>
-<blockquote>
-<div><p>A  B</p>
-</div></blockquote>
-<p>0  1  4
-1  2  5
-2  3  NaN</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scitex_pd.from_xyz">
 <span class="sig-prename descclassname"><span class="pre">scitex_pd.</span></span><span class="sig-name descname"><span class="pre">from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_pd/_convert/_from_xyz.html#from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_pd.from_xyz" title="Link to this definition"></a></dt>
 <dd><p>Convert a DataFrame with ‘x’, ‘y’, ‘z’ format into a heatmap DataFrame.</p>
-<p class="rubric">Example</p>
-<p>import pandas as pd
-data = pd.DataFrame({</p>
-<blockquote>
-<div><p>‘col1’: [‘A’, ‘B’, ‘C’, ‘A’],
-‘col2’: [‘X’, ‘Y’, ‘Z’, ‘Y’],
-‘p_val’: [0.01, 0.05, 0.001, 0.1]</p>
-</div></blockquote>
-<p>})
-data = data.rename(columns={“col1”: “x”, “col2”: “y”, “p_val”: “z”})
-result = from_xyz(data)
-print(result)</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;col2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;p_val&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;col1&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;col2&quot;</span><span class="p">:</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;p_val&quot;</span><span class="p">:</span> <span class="s2">&quot;z&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">from_xyz</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
