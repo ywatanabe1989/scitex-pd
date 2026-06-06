@@ -70,6 +70,7 @@ from ._replace import replace
 from ._round import round
 from ._slice import slice
 from ._sort import sort
+from ._unique import unique, uq
 
 __all__ = [
     "__version__",
@@ -93,4 +94,6 @@ __all__ = [
     "to_numeric",
     "to_xy",
     "to_xyz",
+    "unique",
+    "uq",
 ]
