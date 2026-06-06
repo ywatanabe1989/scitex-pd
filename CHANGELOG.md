@@ -7,6 +7,16 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-06-07
+
+- feat: port `unique` and `uq` from `scitex-gen` `misc.py` (Phase B of
+  the scitex-gen full retirement wave). `unique(data, axis=None)`
+  returns a `DataFrame` tabulating unique values with formatted
+  counts. `uq` is the legacy short alias. The upstream `unique` was
+  defined twice; this port follows the second (winning) definition.
+- Distinct from existing `scitex_pd.get_unique` (which returns a
+  single scalar when a column is mono-valued).
+
 ## [0.1.6]
 
 - Fix tests: remove duplicate `from __future__ import annotations`.
